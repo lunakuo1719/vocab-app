@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>(˃ᆺ˂) 國中必備2000單字</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<style>
+body {
+    margin: 0;
+    padding: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(180deg, #fff0f5, #f6f8ff);
+}
+
+.card {
+    max-width: 480px;
+    margin: auto;
+    background: white;
+    border-radius: 24px;
+    padding: 16px;
+    border: 4px solid #ffe4ec;
+    box-shadow: 0 8px 18px rgba(255,182,193,0.35);
+}
+
+h2, h3 {
+    text-align: center;
+    color: #ff7aa2;
+    margin-top: 8px;
+}
+
+.meaning {
+    font-size: 26px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.progress-bar {
+    height: 14px;
+    background: #ffe4ec;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #ff7aa2;
+    width: 0%;
+}
+
+#progressText {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 6px;
+    color: #555;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    font-size: 20px;
+    border-radius: 16px;
+    border: 2px solid #ffd1dc;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    font-size: 20px;
+    border-radius: 18px;
+    border: none;
+    background: #ff9ec4;
+    color: white;
+    font-weight: bold;
+}
+
+button.choice {
+    background: #b7c9ff;
+}
+
+ul {
+    text-align: left;
+    padding-left: 20px;
+}
+
+canvas {
+    width: 100%;
+    max-width: 440px;
+    margin: 10px auto;
+    display: block;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>(˃ᆺ˂) 國中必備2000單字</h2>
+
+<div class="progress-bar">
+    <div class="progress-fill" id="bar"></div>
+</div>
+<div id="progressText"></div>
+
+<div class="meaning" id="meaning"></div>
+
+<input id="answer" placeholder="請輸入英文">
+<div id="choiceArea"></div>
+
+<button onclick="check()">確認</button>
+<button onclick="speak()">🔊 再聽一次</button>
+
+<div id="result"></div>
+<button id="nextBtn" style="display:none;" onclick="next()">下一題</button>
+
+<div id="reportArea"></div>
+</div>
+
+<script>
+/* ===== 單字題庫（可自行加） ===== */
+const rawData = `
+apple,蘋果
+book,書
+cat,貓
+dog,狗
+egg,蛋
+fish,魚
+go,去
+hat,帽子
+ice,冰
+juice,果汁
+`;
+
+const words = rawData.trim().split("\n").map(l=>{
+    const [word, meaning] = l.split(",");
+    return { word, meaning };
+});
+
+/* ===== 設定 ===== */
+const TOTAL = 40;
+const SPELL_COUNT = 20;
+const DAY_KEY = "daily_vocab_v5";
+const WEEK_KEY = "weekly_vocab_v5";
+const TREND_KEY = "trend_vocab_v5";
+
+/* ===== 狀態 ===== */
+let state = loadDay();
+let queue = shuffle([...words]).slice(0, TOTAL);
+let current = null;
+
+start();
+
+/* ===== 主流程 ===== */
+function start() {
+    updateProgress();
+
+    if (state.index >= TOTAL) {
+        showWrongList();
+        showWeeklyRank();
+        showTrendChart();
+        return;
+    }
+
+    current = queue[state.index];
+    showQuestion();
+}
+
+function showQuestion() {
+    result.innerText = "";
+    nextBtn.style.display = "none";
+    answer.value = "";
+    choiceArea.innerHTML = "";
+
+    if (state.index < SPELL_COUNT) {
+        meaning.innerText = current.meaning;
+        answer.style.display = "block";
+    } else {
+        meaning.innerText = "🎧 聽發音，選出正確單字";
+        answer.style.display = "none";
+        renderChoices();
+    }
+
+    speak();
+}
+
+/* ===== 選擇題 ===== */
+function renderChoices() {
+    const options = shuffle([
+        current.word,
+        ...shuffle(words).filter(w => w.word !== current.word).slice(0,3).map(w=>w.word)
+    ]);
+
+    choiceArea.innerHTML = options.map(o =>
+        `<button class="choice" onclick="selectChoice('${o}')">${o}</button>`
+    ).join("");
+}
+
+function selectChoice(v) {
+    answer.value = v;
+    check();
+}
+
+/* ===== 作答 ===== */
+function check() {
+    if (answer.value.toLowerCase() === current.word.toLowerCase()) {
+        state.index++;
+        saveDay();
+        next();
+    } else {
+        recordWrong(current);
+        result.innerText = `❌ 正確答案是：${current.word}`;
+        nextBtn.style.display = "block";
+    }
+}
+
+function next() {
+    start();
+}
+
+/* ===== 錯題 / 排行 / 趨勢 ===== */
+function recordWrong(w) {
+    state.wrong[w.word] = w;
+    saveDay();
+
+    const week = loadWeek();
+    week[w.word] = (week[w.word] || 0) + 1;
+    saveWeek(week);
+
+    const trend = loadTrend();
+    const today = todayKey();
+    trend[today] = (trend[today] || 0) + 1;
+    saveTrend(trend);
+}
+
+function showWrongList() {
+    reportArea.innerHTML = `
+        <h3>📌 今日錯題</h3>
+        <ul>
+        ${Object.values(state.wrong).map(w =>
+            `<li>${w.word}（${w.meaning}）
+            <button onclick="play('${w.word}')">🔊</button></li>`
+        ).join("")}
+        </ul>
+    `;
+}
+
+function showWeeklyRank() {
+    const week = loadWeek();
+    const sorted = Object.entries(week)
+        .sort((a,b)=>b[1]-a[1])
+        .slice(0,10);
+
+    reportArea.innerHTML += `
+        <h3>📊 一週錯字排行榜</h3>
+        <ol>
+        ${sorted.map(([w,c])=>`<li>${w}（${c} 次）</li>`).join("")}
+        </ol>
+    `;
+}
+
+/* ===== 趨勢圖 ===== */
+function showTrendChart() {
+    const trend = loadTrend();
+    const days = [...Array(7)].map((_,i)=>{
+        const d = new Date();
+        d.setDate(d.getDate() - (6 - i));
+        return d.toISOString().slice(0,10);
+    });
+
+    reportArea.innerHTML += `<h3>📈 最近 7 天錯字趨勢</h3><canvas id="chart" height="200"></canvas>`;
+    const ctx = document.getElementById("chart").getContext("2d");
+
+    const max = Math.max(...days.map(d => trend[d] || 0), 1);
+    const w = ctx.canvas.width;
+    const h = ctx.canvas.height;
+
+    ctx.clearRect(0,0,w,h);
+    ctx.strokeStyle = "#ff7aa2";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+
+    days.forEach((d,i)=>{
+        const x = i * (w / 6);
+        const y = h - (trend[d] || 0) / max * (h - 20);
+        if (i === 0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+    });
+
+    ctx.stroke();
+}
+
+/* ===== 發音 ===== */
+function speak() { play(current.word); }
+function play(word) {
+    const u = new SpeechSynthesisUtterance(word);
+    u.lang = "en-US";
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+}
+
+/* ===== 工具 ===== */
+function shuffle(a){ return a.sort(()=>Math.random()-0.5); }
+
+function updateProgress() {
+    bar.style.width = (state.index / TOTAL * 100) + "%";
+    progressText.innerText = `今日進度 ${state.index} / ${TOTAL}`;
+}
+
+function todayKey() {
+    return new Date().toISOString().slice(0,10);
+}
+
+function loadDay() {
+    const s = JSON.parse(localStorage.getItem(DAY_KEY));
+    if (!s || s.date !== todayKey()) {
+        return { date: todayKey(), index: 0, wrong: {} };
+    }
+    return s;
+}
+function saveDay() {
+    localStorage.setItem(DAY_KEY, JSON.stringify(state));
+}
+
+function loadWeek() {
+    return JSON.parse(localStorage.getItem(WEEK_KEY)) || {};
+}
+function saveWeek(w) {
+    localStorage.setItem(WEEK_KEY, JSON.stringify(w));
+}
+
+function loadTrend() {
+    return JSON.parse(localStorage.getItem(TREND_KEY)) || {};
+}
+function saveTrend(t) {
+    localStorage.setItem(TREND_KEY, JSON.stringify(t));
+}
+</script>
+
+</body>
+</html>
