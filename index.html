@@ -1,160 +1,74 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<title>☪︎國中必備2000單字(˃ᆺ˂)</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>☪︎ 國中必備2000單字</title>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
 
 <style>
-:root {
-    --bg-main: #f7f8fb;
-    --card-bg: #ffffff;
-    --primary: #c7a3b1;
-    --primary-soft: #f2e9ee;
-    --accent: #b6c4d9;
-    --text-main: #444;
-    --text-soft: #777;
+:root{
+  --bg:#000;--card:#161418;--main:#e3e1e4;--soft:#9a969c;
+  --bar:#2a252b;--fill:#c9b6bf;
 }
-
-body {
-    margin: 0;
-    padding: 18px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: linear-gradient(180deg, #f8f9fc, #f1f3f8);
-    color: var(--text-main);
-}
-
-.card {
-    max-width: 480px;
-    margin: auto;
-    background: var(--card-bg);
-    border-radius: 28px;
-    padding: 20px;
-    box-shadow:
-        0 20px 40px rgba(0,0,0,0.06),
-        0 4px 12px rgba(0,0,0,0.04);
-}
-
-h2, h3 {
-    text-align: center;
-    color: #8b6f7a;
-    margin: 8px 0 12px;
-    font-weight: 600;
-}
-
-.meaning {
-    font-size: 26px;
-    text-align: center;
-    margin: 22px 0;
-    letter-spacing: 1px;
-}
-
-.progress-bar {
-    height: 12px;
-    background: var(--primary-soft);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #d4b1bf, #b8c6dd);
-    width: 0%;
-    transition: width 0.3s ease;
-}
-
-#progressText {
-    text-align: center;
-    font-size: 13px;
-    margin-top: 6px;
-    color: var(--text-soft);
-}
-
-input {
-    width: 100%;
-    padding: 14px;
-    font-size: 20px;
-    border-radius: 18px;
-    border: 1.5px solid #e6e6e6;
-    box-sizing: border-box;
-    outline: none;
-}
-
-input:focus {
-    border-color: #cbb3bf;
-    background: #fcfafb;
-}
-
-button {
-    width: 100%;
-    padding: 14px;
-    margin-top: 12px;
-    font-size: 18px;
-    border-radius: 18px;
-    border: none;
-    background: linear-gradient(180deg, #d7b9c6, #c3a6b2);
-    color: white;
-    font-weight: 600;
-    letter-spacing: 1px;
-}
-
-button.choice {
-    background: linear-gradient(180deg, #cfd8e8, #b8c4db);
-    color: #333;
-}
-
-button:active {
-    transform: scale(0.98);
-}
-
-ul {
-    text-align: left;
-    padding-left: 20px;
-    line-height: 1.8;
-}
-
-#preview li {
-    margin-bottom: 6px;
-}
+body{margin:0;padding:18px;background:var(--bg);color:var(--main);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+.card{max-width:480px;margin:auto;background:var(--card);
+border-radius:30px;padding:22px;}
+h2{text-align:center;color:#d7c8d0;margin-bottom:10px;}
+.progress-total{margin:10px 0;}
+.progress-wrap{height:10px;background:var(--bar);border-radius:6px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,#ccb8c1,#bcb4c8);}
+.progress-text{text-align:center;font-size:12px;color:var(--soft);margin-top:4px;}
+.meaning{font-size:26px;text-align:center;margin:20px 0;}
+input,button{width:100%;padding:14px;font-size:18px;border-radius:18px;border:none;}
+input{background:#121015;color:#fff;margin-bottom:8px;}
+button{background:linear-gradient(180deg,#ccb8c1,#bda7b1);}
+button.choice{background:linear-gradient(180deg,#c1bccf,#b3aec4);}
+.word-item{margin-bottom:10px;font-size:14px;}
+.word-bar{height:6px;background:#2b262c;border-radius:4px;overflow:hidden;margin-top:4px;}
+.word-bar-fill{height:100%;background:#b9b3c7;}
+small{color:var(--soft);}
 </style>
 </head>
 
 <body>
 <div class="card">
-<h2>☪︎國中必備2000單字(˃ᆺ˂)</h2>
+<h2>☪︎ 國中必備2000單字</h2>
 
-<!-- ⭐ 今日單字預習區（穩定版） -->
-<div id="preview" style="display:none;">
-  <p style="text-align:center;">📖 今天會考這些單字，先背完再開始</p>
-  <ul id="previewList"></ul>
-  <button onclick="startTest()">我背完了，開始考試</button>
-</div>
-
-<!-- ⭐ 考試區 -->
-<div id="exam">
-  <div class="progress-bar">
-    <div class="progress-fill" id="bar"></div>
+<!-- 總進度 -->
+<div class="progress-total">
+  <div class="progress-wrap">
+    <div class="progress-fill" id="totalBar"></div>
   </div>
-  <div id="progressText"></div>
-
-  <div class="meaning" id="meaning"></div>
-  <input id="answer" placeholder="請輸入英文">
-  <div id="choiceArea"></div>
-
-  <button onclick="check()">確認</button>
-  <button onclick="speak()">🔊 再聽一次</button>
-
-  <div id="result"></div>
+  <div class="progress-text" id="totalText"></div>
 </div>
 
+<!-- 預習 -->
+<div id="preview">
+  <p style="text-align:center;">📖 本組 10 個單字，請先背完</p>
+  <div id="previewList"></div>
+  <button onclick="startGroup()">我背完了，開始考試</button>
+</div>
+
+<!-- 考試 -->
+<div id="exam" style="display:none;">
+  <div class="progress-wrap"><div class="progress-fill" id="bar"></div></div>
+  <div class="progress-text" id="progressText"></div>
+  <div class="meaning" id="question"></div>
+  <input id="answer" placeholder="請輸入或點選">
+  <div id="choices"></div>
+  <button onclick="check()">確認</button>
+</div>
+
+<!-- 匯出 -->
+<button style="margin-top:16px;background:#333;color:#ccc;"
+onclick="exportCSV()">📤 匯出學習紀錄給老師</button>
 </div>
 
 <script>
-/* ===== 單字資料（示例，可自行換成2000字） ===== */
-const rawData = `
+/* ===== 單字資料（示例） ===== */
+const raw = `
 a,[冠詞]一個;一種
 afew,[片語]一些
 alittle,[片語]一點點
@@ -2264,141 +2178,131 @@ zero,[形容詞]零的;,[動詞]把...調整歸零;,[名詞]零
 zoo,[名詞]動物園
 `;
 
-/* ===== 基本設定 ===== */
-const DAILY = 40;
-let words = rawData.trim().split("\n").map(l=>{
-  const p=l.split(",");
-  return {word:p[0], meaning:p[1]};
+/* ===== 初始化資料庫 ===== */
+const NEED=10, DAILY=40;
+let db = JSON.parse(localStorage.getItem("vocabDB")) || {};
+raw.trim().split("\n").forEach(l=>{
+  let [w,m]=l.split(",");
+  if(!db[w]) db[w]={word:w,meaning:m,correct:0};
 });
-shuffle(words);
+save();
 
-let pool = words.slice(0, DAILY);
-let wrongList = [];
-let index = 0;
+/* ===== 建立今日清單 ===== */
+let today=[], group=0, idx=0;
+function buildToday(){
+  today = Object.values(db)
+    .filter(x=>x.correct<NEED)
+    .sort(()=>Math.random()-0.5)
+    .slice(0,DAILY);
+}
+buildToday();
 
-/* ===== 預習清單 ===== */
-function showPreview() {
-  document.getElementById("preview").style.display = "block";
-  document.getElementById("exam").style.display = "none";
+/* ===== 總進度 ===== */
+function updateTotal(){
+  let done = Object.values(db).filter(x=>x.correct>=NEED).length;
+  let total = Object.keys(db).length;
+  totalBar.style.width = (done/total*100)+"%";
+  totalText.innerText = `已熟 ${done} / ${total} 個單字`;
+}
 
-  const ul = document.getElementById("previewList");
-  ul.innerHTML = "";
-
-  pool.forEach(w => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <b>${w.word}</b> — ${w.meaning}
-      <button onclick="previewSpeak('${w.word}')">🔊</button>
-    `;
-    ul.appendChild(li);
+/* ===== 預習 ===== */
+function showPreview(){
+  updateTotal();
+  preview.style.display="block";
+  exam.style.display="none";
+  previewList.innerHTML="";
+  today.slice(group*10,group*10+10).forEach(x=>{
+    previewList.innerHTML+=`
+      <div class="word-item">
+        <b>${x.word}</b> — ${x.meaning}
+        <div class="word-bar">
+          <div class="word-bar-fill"
+            style="width:${x.correct/NEED*100}%"></div>
+        </div>
+        <small>${x.correct} / ${NEED}</small>
+      </div>`;
   });
 }
-
-function startTest() {
-  document.getElementById("preview").style.display = "none";
-  document.getElementById("exam").style.display = "block";
-  index = 0;
-  show();
+function startGroup(){
+  idx=0;
+  preview.style.display="none";
+  exam.style.display="block";
+  showQ();
 }
 
-function previewSpeak(word) {
-  const u = new SpeechSynthesisUtterance(word);
-  u.lang = "en-US";
-  u.rate = 0.75;
-  speechSynthesis.speak(u);
-}
-
-/* ===== 顯示題目 ===== */
-function show(){
-  const w = pool[index];
-  document.getElementById("meaning").innerText = w.meaning;
-  document.getElementById("result").innerText = "";
-  document.getElementById("choiceArea").innerHTML = "";
-  document.getElementById("answer").value = "";
-
-  updateProgress();
-
-  if(index < 20){
-    document.getElementById("answer").style.display = "block";
-    speak();
+/* ===== 題目 ===== */
+function showQ(){
+  let q=today[group*10+idx];
+  let no=group*10+idx;
+  bar.style.width=(no/today.length*100)+"%";
+  progressText.innerText=`第 ${no+1} / ${today.length} 題`;
+  answer.value="";choices.innerHTML="";
+  if(no<20){
+    question.innerText=q.meaning;
+    speak(q.word);
   }else{
-    document.getElementById("answer").style.display = "none";
-    makeChoices(w);
+    question.innerText=Math.random()<0.5?q.meaning:q.word;
+    makeChoices(q);
   }
-}
-
-/* ===== 發音 ===== */
-function speak(){
-  const u = new SpeechSynthesisUtterance(pool[index].word);
-  u.lang = "en-US";
-  u.rate = 0.75;
-  speechSynthesis.speak(u);
 }
 
 /* ===== 選擇題 ===== */
-function makeChoices(w){
-  let opts = [w.word];
-  while(opts.length < 4){
-    let r = words[Math.floor(Math.random()*words.length)].word;
-    if(!opts.includes(r)) opts.push(r);
+function makeChoices(q){
+  let opts=[q.word];
+  while(opts.length<4){
+    let r=today[Math.floor(Math.random()*today.length)].word;
+    if(!opts.includes(r))opts.push(r);
   }
-  shuffle(opts);
-  opts.forEach(o=>{
-    const b = document.createElement("button");
-    b.className = "choice";
-    b.innerText = o;
-    b.onclick = ()=>submit(o);
-    document.getElementById("choiceArea").appendChild(b);
+  opts.sort(()=>Math.random()-0.5).forEach(o=>{
+    let b=document.createElement("button");
+    b.className="choice";
+    b.innerText=o;
+    b.onclick=()=>{answer.value=o;check();};
+    choices.appendChild(b);
   });
-}
-
-function submit(val){
-  document.getElementById("answer").value = val;
-  check();
 }
 
 /* ===== 檢查 ===== */
 function check(){
-  const w = pool[index];
-  const input = document.getElementById("answer").value.toLowerCase();
-
-  if(input === w.word.toLowerCase()){
-    document.getElementById("result").innerText = "✅ 正確";
-    index++;
-    setTimeout(show, 500);
-  }else{
-    document.getElementById("result").innerText = "❌ 錯了，再試一次";
-    if(!wrongList.includes(w)) wrongList.push(w);
-  }
-
-  if(index >= pool.length){
-    if(wrongList.length > 0){
-      alert("📌 以下是今日錯的單字，請先背完！");
-      pool = [...wrongList];
-      wrongList = [];
-      index = 0;
+  let q=today[group*10+idx];
+  if(answer.value.trim().toLowerCase()===q.word){
+    if(q.correct<NEED) q.correct++;
+    save();
+    idx++;
+    if(idx>=10){
+      group++;
+      if(group*10>=today.length){
+        alert("🎉 今日完成！");
+        buildToday();group=0;
+      }
       showPreview();
-    }else{
-      alert("🎉 今日完成！");
-    }
+    }else showQ();
+  }else{
+    alert("❌ 再試一次");
   }
 }
 
-/* ===== 進度 ===== */
-function updateProgress(){
-  document.getElementById("progressText").innerText =
-    `第 ${index+1} / ${pool.length} 題`;
-  document.getElementById("bar").style.width =
-    `${(index/pool.length)*100}%`;
+/* ===== 匯出 CSV ===== */
+function exportCSV(){
+  let rows=["word,meaning,correct,mastered"];
+  Object.values(db).forEach(x=>{
+    rows.push(`${x.word},${x.meaning},${x.correct},${x.correct>=NEED}`);
+  });
+  let blob=new Blob([rows.join("\n")],{type:"text/csv"});
+  let a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="vocab_progress.csv";
+  a.click();
 }
 
-function shuffle(a){a.sort(()=>Math.random()-0.5);}
-
-/* ===== 啟動點：一定先預習 ===== */
-showPreview();
+/* ===== 工具 ===== */
+function speak(w){
+  let u=new SpeechSynthesisUtterance(w);
+  u.lang="en-US";u.rate=0.75;
+  speechSynthesis.speak(u);
+}
+function save(){localStorage.setItem("vocabDB",JSON.stringify(db));}
+updateTotal();showPreview();
 </script>
-
 </body>
 </html>
-
-
