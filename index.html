@@ -3,322 +3,375 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-<title>☪︎ 國中2000單字學習系統</title>
+<title>烏薩奇·單字討伐團！ Yaha!</title>
+
+<!-- 烏薩奇 GIF Favicon -->
+<link rel="icon" href="https://lunakuo1719.github.io/vocab-app/usagi.gif" type="image/gif">
+
 <style>
-:root{
-  --bg:#0a0a0c; --card:#1c1b1e; --main:#ffffff; --soft:#b1abb8;
-  --accent:#d8c9da; --highlight:#9bc1ff; --success:#81c784; --error:#ff8a80;
-}
-*{box-sizing:border-box; transition: 0.2s;}
-body{
-  margin:0; padding:10px; background:var(--bg); color:var(--main);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  display: flex; align-items: center; min-height: 100vh;
-}
-.card{
-  width:100%; max-width:600px; margin:auto; background:var(--card);
-  border-radius:36px; padding:32px 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+:root {
+    --usagi-yellow: #fff9c4;
+    --usagi-dark: #5d4037;
+    --chiikawa-pink: #fce4ec;
+    --hachi-blue: #e3f2fd;
+    --accent-orange: #ffb74d;
 }
 
-/* 標題與整體比例優化 */
-h2{text-align:center; margin:0 0 25px; font-size:32px; color:var(--accent); letter-spacing: 1px;}
+/* 全域手繪感設定 */
+* { box-sizing: border-box; font-family: "M PLUS Rounded 1c", "Microsoft JhengHei", sans-serif; transition: 0.3s; }
 
-/* 數據儀表板 - 變大、變顯眼 */
-.stats-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:30px; }
-.stat-box{ background:rgba(255,255,255,0.06); padding:24px 10px; border-radius:24px; text-align:center; border: 1px solid rgba(255,255,255,0.05); }
-.stat-val{ font-size:42px; font-weight:bold; color:var(--accent); display:block; margin-bottom: 5px;}
-.stat-label{ font-size:16px; color:var(--soft); font-weight: 500;}
-
-/* 進度條文字與高度 */
-.progress-container{ margin: 25px 0; }
-.progress-text{ font-size: 20px; color: var(--highlight); text-align: center; margin-bottom: 12px; font-weight: bold; }
-.progress-wrap{ height:16px; background:#333; border-radius:8px; overflow:hidden; }
-.progress-fill{ height:100%; background:linear-gradient(90deg,#ccb8c1,#9bc1ff); width:0%; border-radius:8px; }
-
-/* 題目顯示區域 - 專為手機大字設計 */
-.word-display{ font-size:48px; font-weight:800; text-align:center; margin:30px 0; display: flex; justify-content: center; align-items: center; gap: 15px; color: #fff;}
-.meaning-display{ font-size:28px; color:var(--soft); text-align:center; margin-bottom:25px; line-height: 1.6; font-weight: 500;}
-
-/* 按鈕全面加大 */
-button{ width:100%; padding:22px; font-size:24px; border-radius:22px; border:none; cursor:pointer; margin-top:15px; font-weight:bold; display: flex; align-items: center; justify-content: center; gap: 10px;}
-.btn-main{ background:var(--accent); color:#1a1a1a; }
-.btn-choice{ background:rgba(255,255,255,0.08); color:var(--main); border: 2px solid transparent; text-align: center; }
-.btn-choice:active{ background:rgba(255,255,255,0.2); border-color: var(--accent); }
-.btn-finish{ background:var(--success); color:#fff; font-size:26px; }
-.btn-speak{ width:auto; padding:15px 35px; background:#4a4458; color:white; font-size:22px; margin: 20px auto; border-radius:18px;}
-
-/* 輸入框優化 */
-input{
-  width:100%; padding:22px; font-size:32px; border-radius:20px; border:3px solid #444;
-  background:#000; color:#fff; text-align:center; outline:none; margin:15px 0;
+body {
+    margin: 0; padding: 15px; background-color: #fffde7;
+    display: flex; justify-content: center; align-items: center; min-height: 100vh;
+    color: var(--usagi-dark);
 }
-input:focus{ border-color:var(--accent); }
 
-.hidden{ display:none; }
-#log{ font-size:16px; color:var(--soft); margin-top:25px; text-align:center; border-top: 1px solid #333; padding-top: 15px;}
-.badge{ display:inline-block; padding:8px 20px; border-radius:14px; background:var(--highlight); color:#000; font-size:16px; font-weight:bold; margin-bottom:20px;}
-.speaker-icon{ cursor: pointer; color: var(--highlight); font-size: 40px; }
+.card {
+    width: 100%; max-width: 500px; background: white;
+    border: 4px solid var(--usagi-dark);
+    border-radius: 40px; padding: 25px;
+    box-shadow: 8px 8px 0px var(--accent-orange);
+    position: relative;
+}
+
+/* 烏薩奇樣式 */
+.header-deco {
+    display: flex; justify-content: center; align-items: center; margin-bottom: 20px;
+}
+
+.usagi-icon {
+    width: 100px;
+    cursor: pointer;
+    animation: bounce 0.6s infinite alternate;
+    transition: 0.3s;
+}
+
+.usagi-shake {
+    animation: shake 0.5s;
+}
+
+.usagi-gray {
+    filter: grayscale(100%);
+}
+
+.usagi-bright {
+    filter: brightness(1.5);
+}
+
+@keyframes bounce {
+    from { transform: translateY(0) rotate(0deg); }
+    to { transform: translateY(-10px) rotate(5deg); }
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+/* 儀表板樣式 */
+.stats-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+.stat-box {
+    padding: 15px; border-radius: 25px; border: 3px solid var(--usagi-dark);
+    text-align: center; font-weight: bold;
+}
+.stat-box.pink { background-color: var(--chiikawa-pink); }
+.stat-box.blue { background-color: var(--hachi-blue); }
+.stat-val { font-size: 32px; display: block; }
+
+/* 進度條 */
+.progress-area { margin-bottom: 20px; text-align: center; font-weight: bold; }
+.bar-outer { 
+    height: 24px; background: #eee; border: 3px solid var(--usagi-dark); 
+    border-radius: 12px; overflow: hidden; margin-top: 5px;
+}
+.bar-inner { height: 100%; width: 0%; background: linear-gradient(90deg, #fff176, var(--accent-orange)); }
+
+/* 內容顯示區 */
+.word-box { text-align: center; margin: 30px 0; }
+.word-text { font-size: 48px; font-weight: 900; margin-bottom: 10px; display: inline-block;}
+.meaning-text { font-size: 26px; color: #795548; font-weight: bold; }
+
+.sentence-area {
+    background: #fffef2; border: 2px dashed var(--accent-orange);
+    padding: 15px; border-radius: 20px; margin-top: 20px; line-height: 1.6;
+    position: relative;
+}
+
+/* 按鈕樣式 */
+button {
+    width: 100%; padding: 18px; font-size: 22px; font-weight: 900;
+    border-radius: 20px; border: 3px solid var(--usagi-dark);
+    cursor: pointer; margin-top: 15px;
+}
+.btn-yaha { background: #fff176; box-shadow: 0 6px 0 var(--usagi-dark); }
+.btn-yaha:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--usagi-dark); }
+
+.btn-choice { background: white; margin-bottom: 10px; font-size: 20px; }
+.btn-choice:hover { background: var(--hachi-blue); }
+
+.speaker { cursor: pointer; font-size: 28px; vertical-align: middle; padding: 5px; }
+
+.hidden { display: none; }
+#log { margin-top: 20px; font-size: 14px; text-align: center; color: #8d6e63; }
 </style>
 </head>
 <body>
 
+<!-- 音效 -->
+<audio id="sound-correct" src="https://lunakuo1719.github.io/vocab-app/ula.mp3"></audio>
+<audio id="sound-wrong" src="https://lunakuo1719.github.io/vocab-app/ha.mp3"></audio>
+<audio id="sound-usagi" src="https://lunakuo1719.github.io/vocab-app/uulalauula.mp3"></audio>
+
 <div class="card">
+    <div class="header-deco">
+        <img id="usagi" src="https://lunakuo1719.github.io/vocab-app/usagi.gif" class="usagi-icon" onclick="usagiSpeak()">
+    </div>
+
     <div id="dashboard">
-        <h2>☪︎ 國中2000單字學習</h2>
-        <div class="stats-grid">
-            <div class="stat-box"><span class="stat-val" id="stat-total">0</span><span class="stat-label">已學會單字</span></div>
-            <div class="stat-box"><span class="stat-val" id="stat-streak">0</span><span class="stat-label">連續達標天</span></div>
+        <h2 style="text-align:center;">單字討伐團！ Yaha!</h2>
+        <div class="stats-container">
+            <div class="stat-box pink"><span class="stat-val" id="stat-total">0</span>已學會</div>
+            <div class="stat-box blue"><span class="stat-val" id="stat-streak">0</span>加油天數</div>
         </div>
-        <div class="progress-container">
-            <p class="progress-text">總進度: <span id="progress-percent">0</span>%</p>
-            <div class="progress-wrap"><div class="progress-fill" id="total-bar"></div></div>
+        <div class="progress-area">
+            <span>討伐總進度 <span id="progress-percent">0</span>%</span>
+            <div class="bar-outer"><div class="bar-inner" id="total-bar"></div></div>
         </div>
-        
-        <button class="btn-main" onclick="startDaily()">📅 開始今日任務 (40字)</button>
-        <button class="btn-main" style="background:#8e9aaf" onclick="startReview()">🔄 弱點複習模式</button>
-        <button class="btn-main" style="background:#b8c0ff" onclick="startChallenge()">⚡ 60秒限時挑戰</button>
+        <button class="btn-yaha" onclick="startDaily()">咿呀哈！開始練習</button>
+    </div>
+
+    <div id="study-zone" class="hidden">
+        <div style="text-align:center; font-weight:bold;">✨ 預習時間 (Puru!) <span id="study-progress">1/5</span></div>
+        <div class="word-box">
+            <div class="word-text" id="study-word">Apple</div>
+            <span class="speaker" onclick="triggerSpeak('word')">🔊</span>
+            <div class="meaning-text" id="study-meaning">[名詞] 蘋果</div>
+            <div class="sentence-area">
+                <span id="study-sentence">I eat an apple. (我吃蘋果)</span>
+                <span class="speaker" onclick="triggerSpeak('sentence')">🔊</span>
+            </div>
+        </div>
+        <button class="btn-yaha" onclick="nextStudy()">下一個 (嗚拉拉!)</button>
     </div>
 
     <div id="game-zone" class="hidden">
-        <div id="mode-badge" class="badge">今日任務</div>
-        
-        <div class="progress-container">
-            <div id="task-progress-text" class="progress-text">第 0 / 0 題</div>
-            <div class="progress-wrap"><div class="progress-fill" id="exam-bar"></div></div>
+        <div style="text-align:center; font-weight:bold;">🎯 正式討伐！ <span id="quiz-progress">1/5</span></div>
+        <div class="bar-outer" style="height:12px;"><div class="bar-inner" id="exam-bar"></div></div>
+        <div class="word-box">
+            <div class="word-text" id="q-text">Apple</div>
+            <span class="speaker" id="q-speak" onclick="triggerSpeak('quiz')">🔊</span>
+            <div style="margin-top:10px; font-weight:bold; color:#8d6e63;">這是什麼意思呢？</div>
         </div>
-
-        <div id="timer-display" class="hidden" style="text-align:center; color:var(--error); font-size:24px; font-weight:bold; margin-bottom:15px;">時間: 60s</div>
-        
-        <div id="question-container">
-            <div id="q-text" class="word-display">Word</div>
-            <div id="q-subtext" class="meaning-display">載入中...</div>
-            <div id="choices-area"></div>
-            
-            <input type="text" id="spelling-input" class="hidden" 
-                   placeholder="請在此輸入..." autocomplete="off" autocorrect="off" 
-                   autocapitalize="none" spellcheck="false">
-            
-            <button id="confirm-btn" class="btn-main hidden" onclick="checkAnswer()">確認答案</button>
-        </div>
-        
+        <div id="choices-area"></div>
+        <input type="text" id="spelling-input" class="hidden" placeholder="拼拼看...">
+        <button id="confirm-btn" class="btn-yaha hidden" onclick="checkAnswer()">我寫好了！</button>
         <div id="log"></div>
-        <button onclick="exitGame()" style="background:transparent; color:var(--soft); font-size:18px; margin-top:30px; text-decoration: underline;">✕ 放棄測驗並離開</button>
     </div>
 
     <div id="finish-zone" class="hidden" style="text-align:center;">
-        <h2 id="finish-title" style="font-size:36px;">🎉 任務完成！</h2>
-        <div class="stat-box" style="margin:30px 0; background:rgba(129,199,132,0.15);">
-            <div id="finish-stats" style="font-size:26px; line-height:2.5; font-weight: bold;"></div>
-        </div>
-        <button class="btn-finish" onclick="showDashboard()">回主選單</button>
+        <h2 style="font-size:32px;">🎉 討伐成功！ 🎉</h2>
+        <div id="finish-stats" style="font-size:24px; margin:20px 0; font-weight:bold;"></div>
+        <button class="btn-yaha" id="next-group-btn">繼續下一組 (Yaha!)</button>
+        <button onclick="showDashboard()" style="background:none; border:none; color:#8d6e63; text-decoration:underline; margin-top:20px;">回首頁</button>
     </div>
 </div>
 
 <script>
-/* 單字庫 (測試用) */
+// 單字資料庫
 const rawData = `
-a,[冠詞] 一個;一種, I have a dream.
-a few,[片語] 一些, I have a few cookies.
-a little,[片語] 一點點, Please give me a little water.
-a lot,[片語] 很多, He has a lot of toys.
-A.M.,[副詞] 上午, It is 8:00 A.M.
-able,[形容詞] 有能力的, She is able to speak English.
-about,[介系詞] 大約;關於, Let's talk about your day.
-any,[形容詞] 任何的, Do you have any questions?
-anybody,[代名詞] 任何人, Does anybody know the answer?
-be,[動詞] 是;在, I want to be a pilot.
-beach,[名詞] 海灘, Let's go to the beach.
-bus,[名詞] 公車, I go to work by bus.
-candy,[名詞] 糖果, Don't eat too much candy.
-cute,[形容詞] 可愛的, Your baby is so cute!
-dad,[名詞] 父親, My dad is a teacher.
-drink,[動詞] 喝, What do you want to drink?
-drive,[動詞] 開車, I learned to drive at twenty.
-easy,[形容詞] 容易的, This question is very easy.
-eat,[動詞] 吃, I like to eat apples.
-egg,[名詞] 蛋, I want a fried egg.
-eight,[名詞] 八, My sister is eight years old.
-family,[名詞] 家庭, I love my family.
-fast,[形容詞] 快的, He runs very fast.
-fat,[形容詞] 胖的, My cat is getting fat.
-father,[名詞] 父親, My father is a doctor.
-hello,[感歎詞] 哈囉, Hello, how are you?
-help,[動詞] 幫忙, Can you help me?
-her,[代名詞] 她, I know her.
-here,[副詞] 在這裡, Come here.
-hero,[名詞] 英雄, He is my hero.
-know,[動詞] 知道, I know the answer.
-mail,[名詞] 信件, Is there any mail for me?
-many,[形容詞] 很多的, How many friends do you have?
-map,[名詞] 地圖, Look at the map.
-march,[名詞] 三月, My birthday is in March.
-mark,[名詞] 記號, I got a high mark.
-name,[名詞] 名字, What's your name?
-only,[副詞] 只, I only have five dollars.
-open,[動詞] 打開, Please open the window.
-word,[名詞] 字, What is this word?
-work,[動詞] 工作, He works in a bank.
-you,[代名詞] 你, You are my friend.
-young,[形容詞] 年輕的, She is a young girl.
-your,[代名詞] 你的, Is this your bag?
+apple,[名詞] 蘋果, I eat an apple. (我吃一個蘋果。), 1
+beach,[名詞] 海灘, Let's go to the beach. (我們去海灘吧。), 1
+candy,[名詞] 糖果, Don't eat too much candy. (別吃太多糖果。), 2
+drive,[動詞] 開車, I learned to drive at twenty. (我二十歲學開車。), 2
+eight,[名詞] 八, My sister is eight years old. (我妹妹八歲。), 1
+environment,[名詞] 環境, Protect our environment. (保護我們的環境。), 3
+you,[代名詞] 你, You are my friend. (你是你的朋友。), 1
 `;
 
 let db = [];
-let userStats = JSON.parse(localStorage.getItem('vocab_v6_stats')) || { mastered: [], wrongCounts: {}, streak: 0, lastDate: null };
+let userStats = JSON.parse(localStorage.getItem('usagi_vocab_v1')) || { mastered: [], streak: 0, lastDate: null };
+let session = { fullPool: [], groupIndex: 0, currentGroup: [], index: 0, correct: 0, wrong: 0 };
 
 function initDB() {
     db = rawData.trim().split("\n").map(line => {
-        let [w, m, s] = line.split(",");
-        return { word: w.trim(), meaning: m.trim(), sentence: s.trim() };
+        let p = line.split(",");
+        return { word: p[0].trim(), meaning: p[1].trim(), sentence: p[2].trim(), level: parseInt(p[3]) || 1 };
     });
     showDashboard();
 }
 
-let currentGame = { mode: '', pool: [], index: 0, correct: 0, wrong: 0, timer: null, timeLeft: 60 };
-
 function showDashboard() {
+    document.querySelectorAll('.card > div:not(.header-deco)').forEach(div => div.classList.add('hidden'));
     document.getElementById('dashboard').classList.remove('hidden');
-    document.getElementById('game-zone').classList.add('hidden');
-    document.getElementById('finish-zone').classList.add('hidden');
     document.getElementById('stat-total').innerText = userStats.mastered.length;
-    document.getElementById('stat-streak').innerText = userStats.streak || 0;
+    document.getElementById('stat-streak').innerText = userStats.streak;
     let progress = Math.round((userStats.mastered.length / db.length) * 100) || 0;
     document.getElementById('total-bar').style.width = progress + "%";
     document.getElementById('progress-percent').innerText = progress;
+
+    // 恢復烏薩奇原狀
+    const usagi = document.getElementById('usagi');
+    usagi.className = "usagi-icon";
+    usagi.src = "https://lunakuo1719.github.io/vocab-app/usagi.gif";
 }
 
 function startDaily() {
-    currentGame = { mode: 'daily', pool: pick(db, Math.min(db.length, 40)), index: 0, correct: 0, wrong: 0 };
-    setupGame("今日任務");
+    session.fullPool = shuffle(db).slice(0, 40);
+    session.groupIndex = 0;
+    startNextGroup();
 }
 
-function startReview() {
-    let wrongWords = db.filter(w => (userStats.wrongCounts[w.word] || 0) > 0);
-    if (wrongWords.length < 2) { alert("目前還沒有錯題紀錄！"); return; }
-    currentGame = { mode: 'review', pool: shuffle(wrongWords).slice(0, 20), index: 0, correct: 0, wrong: 0 };
-    setupGame("弱點複習");
+function startNextGroup() {
+    session.currentGroup = session.fullPool.slice(session.groupIndex, session.groupIndex + 5);
+    if (session.currentGroup.length === 0) return showDashboard();
+    session.index = 0;
+    session.correct = 0;
+    session.wrong = 0;
+    showStudy();
 }
 
-function startChallenge() {
-    currentGame = { mode: 'challenge', pool: shuffle(db), index: 0, correct: 0, wrong: 0, timeLeft: 60 };
-    setupGame("限時挑戰");
-    startTimer();
+function showStudy() {
+    document.querySelectorAll('.card > div:not(.header-deco)').forEach(div => div.classList.add('hidden'));
+    document.getElementById('study-zone').classList.remove('hidden');
+    let q = session.currentGroup[session.index];
+    document.getElementById('study-progress').innerText = `${session.index + 1} / 5`;
+    document.getElementById('study-word').innerText = q.word;
+    document.getElementById('study-meaning').innerText = q.meaning;
+    document.getElementById('study-sentence').innerText = q.sentence;
+    speak(q.word);
 }
 
-function setupGame(title) {
-    document.getElementById('dashboard').classList.add('hidden');
+function triggerSpeak(type) {
+    let q = session.currentGroup[session.index];
+    if (type === 'word' || type === 'quiz') speak(q.word);
+    else if (type === 'sentence') speak(q.sentence.split('(')[0]);
+}
+
+function nextStudy() {
+    session.index++;
+    if (session.index < session.currentGroup.length) showStudy();
+    else startQuiz();
+}
+
+function startQuiz() {
+    session.index = 0;
+    document.querySelectorAll('.card > div:not(.header-deco)').forEach(div => div.classList.add('hidden'));
     document.getElementById('game-zone').classList.remove('hidden');
-    document.getElementById('mode-badge').innerText = title;
     document.getElementById('log').innerHTML = "";
-    nextQuestion();
+    nextQuizQuestion();
 }
 
-function nextQuestion() {
-    if (currentGame.mode !== 'challenge' && currentGame.index >= currentGame.pool.length) { finishGame(); return; }
+function nextQuizQuestion() {
+    if (session.index >= session.currentGroup.length) return showFinish();
+    let q = session.currentGroup[session.index];
+    let isChoose = Math.random() > 0.4; // 60% 選擇題
     
-    let q = currentGame.pool[currentGame.index];
-    let qText = document.getElementById('q-text');
-    let qSub = document.getElementById('q-subtext');
-    let choicesArea = document.getElementById('choices-area');
-    let inputArea = document.getElementById('spelling-input');
-    let confirmBtn = document.getElementById('confirm-btn');
+    document.getElementById('quiz-progress').innerText = `${session.index + 1} / 5`;
+    document.getElementById('exam-bar').style.width = (session.index / 5) * 100 + "%";
+    document.getElementById('q-text').innerText = isChoose ? q.word : q.meaning;
+    document.getElementById('q-speak').style.display = isChoose ? "inline-block" : "none";
+    
+    let area = document.getElementById('choices-area');
+    let input = document.getElementById('spelling-input');
+    let btn = document.getElementById('confirm-btn');
+    
+    area.innerHTML = "";
+    input.classList.add('hidden');
+    btn.classList.add('hidden');
 
-    if (currentGame.mode === 'challenge') {
-        document.getElementById('task-progress-text').innerText = `已挑戰 ${currentGame.index} 題`;
-    } else {
-        document.getElementById('task-progress-text').innerText = `進度：${currentGame.index + 1} / ${currentGame.pool.length}`;
-        document.getElementById('exam-bar').style.width = (currentGame.index / currentGame.pool.length) * 100 + "%";
-    }
-
-    choicesArea.innerHTML = "";
-    inputArea.classList.add('hidden');
-    confirmBtn.classList.add('hidden');
-
-    let isSpelling = (currentGame.mode !== 'challenge' && Math.random() > 0.5);
-
-    if (!isSpelling) {
-        qText.innerHTML = `${q.word} <span class="speaker-icon" onclick="speak('${q.word.replace(/'/g,"\\'")}')">🔊</span>`;
-        qSub.innerText = "請選擇正確意思";
-        let opts = pick(db.filter(x => x.word !== q.word), 3).concat(q);
+    if (isChoose) {
+        let opts = shuffle(db.filter(x => x.word !== q.word)).slice(0, 3).concat(q);
         shuffle(opts).forEach(opt => {
-            let btn = document.createElement('button');
-            btn.className = "btn-choice";
-            btn.innerText = opt.meaning;
-            btn.onclick = () => handleAnswer(opt.word === q.word);
-            choicesArea.appendChild(btn);
+            let b = document.createElement('button');
+            b.className = "btn-choice";
+            b.innerText = opt.meaning;
+            b.onclick = () => checkAnswer(opt.word === q.word);
+            area.appendChild(b);
         });
     } else {
-        qText.innerText = q.meaning;
-        qSub.innerHTML = `<button class="btn-speak" onclick="speak('${q.word.replace(/'/g,"\\'")}')">🔊 聽單字發音</button>`;
-        inputArea.classList.remove('hidden');
-        confirmBtn.classList.remove('hidden');
-        inputArea.value = "";
-        setTimeout(()=>inputArea.focus(), 300);
+        input.classList.remove('hidden');
+        btn.classList.remove('hidden');
+        input.value = "";
+        setTimeout(() => input.focus(), 300);
     }
     speak(q.word);
 }
 
-function handleAnswer(isCorrect) {
-    let q = currentGame.pool[currentGame.index];
-    if (isCorrect) {
-        currentGame.correct++;
+function checkAnswer(isCorrect) {
+    let q = session.currentGroup[session.index];
+    let finalCorrect = isCorrect;
+    if (isCorrect === undefined) {
+        finalCorrect = document.getElementById('spelling-input').value.trim().toLowerCase() === q.word.toLowerCase();
+    }
+
+    const usagi = document.getElementById('usagi');
+
+    if (finalCorrect) {
+        session.correct++;
         if (!userStats.mastered.includes(q.word)) userStats.mastered.push(q.word);
-        logMsg(`✅ ${q.word}`);
+        logMsg("✅ Yaha! " + q.word);
+
+        // 答對：抖動+亮起
+        usagi.className = "usagi-icon usagi-shake usagi-bright";
+        usagi.src = "https://lunakuo1719.github.io/vocab-app/usagi.gif";
+        const sound = document.getElementById('sound-correct');
+        sound.currentTime = 0; sound.play().catch(e => {});
+        setTimeout(() => usagi.className = "usagi-icon", 600);
+
     } else {
-        currentGame.wrong++;
-        userStats.wrongCounts[q.word] = (userStats.wrongCounts[q.word] || 0) + 1;
-        logMsg(`❌ ${q.word}`);
+        session.wrong++;
+        logMsg("😢 Puru... " + q.word);
+
+        // 答錯：先抖動再變灰
+        usagi.className = "usagi-icon usagi-shake";
+        const sound = document.getElementById('sound-wrong');
+        sound.currentTime = 0; sound.play().catch(e => {});
+        setTimeout(() => {
+            usagi.className = "usagi-icon usagi-gray";
+            usagi.src = "https://lunakuo1719.github.io/vocab-app/usagi-ha.gif";
+        }, 500);
     }
+
+    session.index++;
     saveData();
-    currentGame.index++;
-    if (currentGame.mode === 'challenge' && currentGame.index >= currentGame.pool.length) finishGame();
-    else setTimeout(nextQuestion, 300);
+    setTimeout(nextQuizQuestion, 600);
 }
 
-function checkAnswer() {
-    let q = currentGame.pool[currentGame.index];
-    handleAnswer(document.getElementById('spelling-input').value.trim().toLowerCase() === q.word.toLowerCase());
-}
-
-function startTimer() {
-    let display = document.getElementById('timer-display');
-    display.classList.remove('hidden');
-    currentGame.timer = setInterval(() => {
-        currentGame.timeLeft--;
-        display.innerText = `剩餘時間: ${currentGame.timeLeft}s`;
-        if (currentGame.timeLeft <= 0) { clearInterval(currentGame.timer); finishGame(); }
-    }, 1000);
-}
-
-function finishGame() {
-    clearInterval(currentGame.timer);
-    document.getElementById('game-zone').classList.add('hidden');
+function showFinish() {
+    document.querySelectorAll('.card > div:not(.header-deco)').forEach(div => div.classList.add('hidden'));
     document.getElementById('finish-zone').classList.remove('hidden');
-    let today = new Date().toLocaleDateString();
-    if (userStats.lastDate !== today && currentGame.mode === 'daily') {
-        userStats.streak = (userStats.streak || 0) + 1;
-        userStats.lastDate = today;
-        saveData();
+    document.getElementById('finish-stats').innerText = `答對：${session.correct} | 答錯：${session.wrong}`;
+    session.groupIndex += 5;
+    
+    let btn = document.getElementById('next-group-btn');
+    if (session.groupIndex >= session.fullPool.length) {
+        btn.innerText = "全部討伐完畢！";
+        btn.onclick = showDashboard;
+    } else {
+        btn.innerText = "下一組！ (Yaha!)";
+        btn.onclick = startNextGroup;
     }
-    document.getElementById('finish-stats').innerHTML = `
-        <span style="color:var(--success)">正確答對：${currentGame.correct}</span><br>
-        <span style="color:var(--error)">錯誤答錯：${currentGame.wrong}</span>
-    `;
 }
 
-function pick(arr, n) { return shuffle([...arr]).slice(0, n); }
-function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
-function logMsg(msg) { document.getElementById('log').innerHTML = msg + " | " + document.getElementById('log').innerHTML; }
-function speak(t) { window.speechSynthesis.cancel(); let u = new SpeechSynthesisUtterance(t); u.lang = "en-US"; u.rate = 0.8; window.speechSynthesis.speak(u); }
-function saveData() { localStorage.setItem('vocab_v6_stats', JSON.stringify(userStats)); }
-function exitGame() { if (confirm("確定要退出測驗嗎？")) { clearInterval(currentGame.timer); showDashboard(); } }
+function speak(t) {
+    window.speechSynthesis.cancel();
+    let u = new SpeechSynthesisUtterance(t);
+    u.lang = "en-US"; u.rate = 0.9;
+    window.speechSynthesis.speak(u);
+}
 
-document.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        const input = document.getElementById('spelling-input');
-        if (!input.classList.contains('hidden')) checkAnswer();
-    }
-});
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+function logMsg(m) { document.getElementById('log').innerHTML = m + "<br>" + document.getElementById('log').innerHTML; }
+function saveData() { localStorage.setItem('usagi_vocab_v1', JSON.stringify(userStats)); }
+
+// 點擊烏薩奇播放專用音效
+function usagiSpeak() {
+    const audio = document.getElementById('sound-usagi');
+    audio.currentTime = 0; audio.play().catch(e => {});
+}
 
 initDB();
 </script>
