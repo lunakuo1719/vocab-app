@@ -11,68 +11,70 @@
 }
 *{box-sizing:border-box; transition: 0.2s;}
 body{
-  margin:0; padding:12px; background:var(--bg); color:var(--main);
+  margin:0; padding:10px; background:var(--bg); color:var(--main);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  touch-action: manipulation; /* 優化點擊反應速度 */
+  display: flex; align-items: center; min-height: 100vh;
 }
 .card{
-  max-width:500px; margin:auto; background:var(--card);
-  border-radius:32px; padding:28px; box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+  width:100%; max-width:600px; margin:auto; background:var(--card);
+  border-radius:36px; padding:32px 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.7);
 }
-h2{text-align:center; margin:10px 0 20px; font-size:28px; color:var(--accent);}
 
-/* 儀表板數據 */
-.stats-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:25px; }
-.stat-box{ background:rgba(255,255,255,0.07); padding:16px; border-radius:20px; text-align:center; }
-.stat-val{ font-size:28px; font-weight:bold; color:var(--accent); display:block;}
-.stat-label{ font-size:14px; color:var(--soft); margin-top:4px;}
+/* 標題與整體比例優化 */
+h2{text-align:center; margin:0 0 25px; font-size:32px; color:var(--accent); letter-spacing: 1px;}
 
-/* 進度條 */
-.progress-container{ margin: 20px 0; }
-.progress-text{ font-size: 18px; color: var(--highlight); text-align: center; margin-bottom: 8px; font-weight: bold; }
-.progress-wrap{ height:12px; background:#333; border-radius:6px; overflow:hidden; }
-.progress-fill{ height:100%; background:linear-gradient(90deg,#ccb8c1,#9bc1ff); width:0%; }
+/* 數據儀表板 - 變大、變顯眼 */
+.stats-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:30px; }
+.stat-box{ background:rgba(255,255,255,0.06); padding:24px 10px; border-radius:24px; text-align:center; border: 1px solid rgba(255,255,255,0.05); }
+.stat-val{ font-size:42px; font-weight:bold; color:var(--accent); display:block; margin-bottom: 5px;}
+.stat-label{ font-size:16px; color:var(--soft); font-weight: 500;}
 
-/* 題目顯示區域 */
-.word-display{ font-size:42px; font-weight:700; text-align:center; margin:25px 0; display: flex; justify-content: center; align-items: center; gap: 12px; line-height:1.2;}
-.meaning-display{ font-size:24px; color:var(--soft); text-align:center; margin-bottom:20px; line-height: 1.6; min-height: 1.6em;}
+/* 進度條文字與高度 */
+.progress-container{ margin: 25px 0; }
+.progress-text{ font-size: 20px; color: var(--highlight); text-align: center; margin-bottom: 12px; font-weight: bold; }
+.progress-wrap{ height:16px; background:#333; border-radius:8px; overflow:hidden; }
+.progress-fill{ height:100%; background:linear-gradient(90deg,#ccb8c1,#9bc1ff); width:0%; border-radius:8px; }
 
-/* 按鈕樣式優化 */
-button{ width:100%; padding:18px; font-size:20px; border-radius:18px; border:none; cursor:pointer; margin-top:12px; font-weight:bold; }
+/* 題目顯示區域 - 專為手機大字設計 */
+.word-display{ font-size:48px; font-weight:800; text-align:center; margin:30px 0; display: flex; justify-content: center; align-items: center; gap: 15px; color: #fff;}
+.meaning-display{ font-size:28px; color:var(--soft); text-align:center; margin-bottom:25px; line-height: 1.6; font-weight: 500;}
+
+/* 按鈕全面加大 */
+button{ width:100%; padding:22px; font-size:24px; border-radius:22px; border:none; cursor:pointer; margin-top:15px; font-weight:bold; display: flex; align-items: center; justify-content: center; gap: 10px;}
 .btn-main{ background:var(--accent); color:#1a1a1a; }
-.btn-choice{ background:rgba(255,255,255,0.08); color:var(--main); text-align:center; border: 2px solid transparent; margin-bottom:5px;}
+.btn-choice{ background:rgba(255,255,255,0.08); color:var(--main); border: 2px solid transparent; text-align: center; }
 .btn-choice:active{ background:rgba(255,255,255,0.2); border-color: var(--accent); }
-.btn-finish{ background:var(--success); color:#fff; font-size:22px; }
-.btn-speak{ width:auto; padding:12px 28px; background:#4a4458; color:white; font-size:18px; margin: 15px auto; display: block; border-radius:14px;}
+.btn-finish{ background:var(--success); color:#fff; font-size:26px; }
+.btn-speak{ width:auto; padding:15px 35px; background:#4a4458; color:white; font-size:22px; margin: 20px auto; border-radius:18px;}
 
-/* 手機輸入框（超大字體、關閉自動完成） */
+/* 輸入框優化 */
 input{
-  width:100%; padding:20px; font-size:28px; border-radius:16px; border:3px solid #444;
-  background:#000; color:#fff; text-align:center; outline:none; margin:10px 0;
+  width:100%; padding:22px; font-size:32px; border-radius:20px; border:3px solid #444;
+  background:#000; color:#fff; text-align:center; outline:none; margin:15px 0;
 }
 input:focus{ border-color:var(--accent); }
 
 .hidden{ display:none; }
-#log{ font-size:15px; color:var(--soft); margin-top:20px; text-align:center; border-top: 1px solid #333; padding-top: 10px; opacity:0.8;}
-.badge{ display:inline-block; padding:6px 16px; border-radius:12px; background:var(--highlight); color:#000; font-size:14px; font-weight:bold; margin-bottom:15px;}
-.speaker-icon{ cursor: pointer; color: var(--highlight); font-size: 32px; }
+#log{ font-size:16px; color:var(--soft); margin-top:25px; text-align:center; border-top: 1px solid #333; padding-top: 15px;}
+.badge{ display:inline-block; padding:8px 20px; border-radius:14px; background:var(--highlight); color:#000; font-size:16px; font-weight:bold; margin-bottom:20px;}
+.speaker-icon{ cursor: pointer; color: var(--highlight); font-size: 40px; }
 </style>
 </head>
 <body>
 
 <div class="card">
     <div id="dashboard">
-        <h2>☪︎ 單字學習系統</h2>
+        <h2>☪︎ 國中2000單字學習</h2>
         <div class="stats-grid">
-            <div class="stat-box"><span class="stat-val" id="stat-total">0</span><span class="stat-label">已掌握</span></div>
-            <div class="stat-box"><span class="stat-val" id="stat-streak">0</span><span class="stat-label">連續天數</span></div>
+            <div class="stat-box"><span class="stat-val" id="stat-total">0</span><span class="stat-label">已學會單字</span></div>
+            <div class="stat-box"><span class="stat-val" id="stat-streak">0</span><span class="stat-label">連續達標天</span></div>
         </div>
         <div class="progress-container">
-            <p class="progress-text">總庫進度: <span id="progress-percent">0</span>%</p>
+            <p class="progress-text">總進度: <span id="progress-percent">0</span>%</p>
             <div class="progress-wrap"><div class="progress-fill" id="total-bar"></div></div>
         </div>
         
-        <button class="btn-main" onclick="startDaily()">📅 今日任務 (40字)</button>
+        <button class="btn-main" onclick="startDaily()">📅 開始今日任務 (40字)</button>
         <button class="btn-main" style="background:#8e9aaf" onclick="startReview()">🔄 弱點複習模式</button>
         <button class="btn-main" style="background:#b8c0ff" onclick="startChallenge()">⚡ 60秒限時挑戰</button>
     </div>
@@ -85,7 +87,7 @@ input:focus{ border-color:var(--accent); }
             <div class="progress-wrap"><div class="progress-fill" id="exam-bar"></div></div>
         </div>
 
-        <div id="timer-display" class="hidden" style="text-align:center; color:var(--error); font-size:20px; font-weight:bold; margin-bottom:10px;">時間: 60s</div>
+        <div id="timer-display" class="hidden" style="text-align:center; color:var(--error); font-size:24px; font-weight:bold; margin-bottom:15px;">時間: 60s</div>
         
         <div id="question-container">
             <div id="q-text" class="word-display">Word</div>
@@ -93,20 +95,20 @@ input:focus{ border-color:var(--accent); }
             <div id="choices-area"></div>
             
             <input type="text" id="spelling-input" class="hidden" 
-                   placeholder="點此輸入英文..." autocomplete="off" autocorrect="off" 
+                   placeholder="請在此輸入..." autocomplete="off" autocorrect="off" 
                    autocapitalize="none" spellcheck="false">
             
             <button id="confirm-btn" class="btn-main hidden" onclick="checkAnswer()">確認答案</button>
         </div>
         
         <div id="log"></div>
-        <button onclick="exitGame()" style="background:transparent; color:var(--soft); font-size:16px; margin-top:25px; text-decoration: underline;">✕ 放棄退出</button>
+        <button onclick="exitGame()" style="background:transparent; color:var(--soft); font-size:18px; margin-top:30px; text-decoration: underline;">✕ 放棄測驗並離開</button>
     </div>
 
     <div id="finish-zone" class="hidden" style="text-align:center;">
-        <h2 id="finish-title" style="font-size:32px;">🎉 任務完成！</h2>
-        <div class="stat-box" style="margin:25px 0; background:rgba(129,199,132,0.1);">
-            <div id="finish-stats" style="font-size:22px; line-height:2.2;"></div>
+        <h2 id="finish-title" style="font-size:36px;">🎉 任務完成！</h2>
+        <div class="stat-box" style="margin:30px 0; background:rgba(129,199,132,0.15);">
+            <div id="finish-stats" style="font-size:26px; line-height:2.5; font-weight: bold;"></div>
         </div>
         <button class="btn-finish" onclick="showDashboard()">回主選單</button>
     </div>
@@ -162,7 +164,7 @@ your,[代名詞] 你的, Is this your bag?
 `;
 
 let db = [];
-let userStats = JSON.parse(localStorage.getItem('vocab_v5_stats')) || { mastered: [], wrongCounts: {}, streak: 0, lastDate: null };
+let userStats = JSON.parse(localStorage.getItem('vocab_v6_stats')) || { mastered: [], wrongCounts: {}, streak: 0, lastDate: null };
 
 function initDB() {
     db = rawData.trim().split("\n").map(line => {
@@ -221,13 +223,11 @@ function nextQuestion() {
     let inputArea = document.getElementById('spelling-input');
     let confirmBtn = document.getElementById('confirm-btn');
 
-    let totalNum = currentGame.pool.length;
     if (currentGame.mode === 'challenge') {
-        document.getElementById('task-progress-text').innerText = `已答 ${currentGame.index} 題`;
-        document.getElementById('exam-bar').style.width = "100%";
+        document.getElementById('task-progress-text').innerText = `已挑戰 ${currentGame.index} 題`;
     } else {
-        document.getElementById('task-progress-text').innerText = `第 ${currentGame.index + 1} / ${totalNum} 題`;
-        document.getElementById('exam-bar').style.width = (currentGame.index / totalNum) * 100 + "%";
+        document.getElementById('task-progress-text').innerText = `進度：${currentGame.index + 1} / ${currentGame.pool.length}`;
+        document.getElementById('exam-bar').style.width = (currentGame.index / currentGame.pool.length) * 100 + "%";
     }
 
     choicesArea.innerHTML = "";
@@ -238,7 +238,7 @@ function nextQuestion() {
 
     if (!isSpelling) {
         qText.innerHTML = `${q.word} <span class="speaker-icon" onclick="speak('${q.word.replace(/'/g,"\\'")}')">🔊</span>`;
-        qSub.innerText = "請選擇意思";
+        qSub.innerText = "請選擇正確意思";
         let opts = pick(db.filter(x => x.word !== q.word), 3).concat(q);
         shuffle(opts).forEach(opt => {
             let btn = document.createElement('button');
@@ -249,7 +249,7 @@ function nextQuestion() {
         });
     } else {
         qText.innerText = q.meaning;
-        qSub.innerHTML = `<button class="btn-speak" onclick="speak('${q.word.replace(/'/g,"\\'")}')">🔊 點我聽發音</button>`;
+        qSub.innerHTML = `<button class="btn-speak" onclick="speak('${q.word.replace(/'/g,"\\'")}')">🔊 聽單字發音</button>`;
         inputArea.classList.remove('hidden');
         confirmBtn.classList.remove('hidden');
         inputArea.value = "";
@@ -285,7 +285,7 @@ function startTimer() {
     display.classList.remove('hidden');
     currentGame.timer = setInterval(() => {
         currentGame.timeLeft--;
-        display.innerText = `時間: ${currentGame.timeLeft}s`;
+        display.innerText = `剩餘時間: ${currentGame.timeLeft}s`;
         if (currentGame.timeLeft <= 0) { clearInterval(currentGame.timer); finishGame(); }
     }, 1000);
 }
@@ -301,8 +301,8 @@ function finishGame() {
         saveData();
     }
     document.getElementById('finish-stats').innerHTML = `
-        <span style="color:var(--success)">正確：${currentGame.correct}</span><br>
-        <span style="color:var(--error)">錯誤：${currentGame.wrong}</span>
+        <span style="color:var(--success)">正確答對：${currentGame.correct}</span><br>
+        <span style="color:var(--error)">錯誤答錯：${currentGame.wrong}</span>
     `;
 }
 
@@ -310,7 +310,7 @@ function pick(arr, n) { return shuffle([...arr]).slice(0, n); }
 function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
 function logMsg(msg) { document.getElementById('log').innerHTML = msg + " | " + document.getElementById('log').innerHTML; }
 function speak(t) { window.speechSynthesis.cancel(); let u = new SpeechSynthesisUtterance(t); u.lang = "en-US"; u.rate = 0.8; window.speechSynthesis.speak(u); }
-function saveData() { localStorage.setItem('vocab_v5_stats', JSON.stringify(userStats)); }
+function saveData() { localStorage.setItem('vocab_v6_stats', JSON.stringify(userStats)); }
 function exitGame() { if (confirm("確定要退出測驗嗎？")) { clearInterval(currentGame.timer); showDashboard(); } }
 
 document.addEventListener('keypress', (e) => {
