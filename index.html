@@ -160,11 +160,17 @@ button { width: 100%; padding: 22px; font-size: 26px; border-radius: 30px; borde
         </div>
         <div id="choices-area"></div>
         <div id="spelling-area" class="hidden">
-            <input type="text" id="spelling-input" placeholder="拼拼看..." autocomplete="off" autocorrect="off">
-            <div id="answer-hint" class="answer-hint-box hidden">
-                <div style="font-size:16px; color:#d32f2f;">加油！正確答案是：</div>
-                <div id="hint-text" style="font-size:36px; color:#b71c1c;">WORD</div>
-            </div>
+    <input type="text" id="spelling-input" placeholder="拼拼看..." 
+           autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+    
+    <div id="answer-hint" class="answer-hint-box hidden">
+        <div style="font-size:16px; color:#d32f2f;">加油！正確答案是：</div>
+        <div id="hint-text" style="font-size:36px; color:#b71c1c;">WORD</div>
+    </div>
+    
+    <button id="confirm-btn" class="btn-yaha" onclick="checkSpelling()">寫好了！ (Yaha!)</button>
+    <button id="memorized-btn" class="btn-yaha hidden" style="background:var(--accent-orange)" onclick="proceedAfterHint()">我背好了！ (Puru!)</button>
+</div>
             <button id="confirm-btn" class="btn-yaha" onclick="checkSpelling()">寫好了！ (Yaha!)</button>
             <button id="memorized-btn" class="btn-yaha hidden" style="background:var(--accent-orange)" onclick="proceedAfterHint()">我背好了！ (Puru!)</button>
         </div>
