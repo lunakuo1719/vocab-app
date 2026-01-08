@@ -9,8 +9,6 @@
 <link rel="icon" href="https://lunakuo1719.github.io/vocab-app/usagi.gif" type="image/gif">
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap');
-
 :root {
     --usagi-yellow: #fffde7;
     --usagi-dark: #5d4037;
@@ -18,10 +16,15 @@
     --hachi-blue: #e1f5fe;
     --accent-orange: #ffcc80;
     --yaha-gold: #fff176;
-    --leaf-green: #c8e6c9;
 }
 
-* { box-sizing: border-box; font-family: 'M PLUS Rounded 1c', sans-serif; transition: 0.2s; }
+/* 🚀 重點：全局字體加粗 */
+* { 
+    box-sizing: border-box; 
+    font-family: 'openhuninn', sans-serif; 
+    font-weight: 900; /* 使用最高級別的粗體 */
+    transition: 0.2s; 
+}
 
 body {
     margin: 0; padding: 10px; background-color: var(--usagi-yellow);
@@ -38,7 +41,6 @@ body {
 }
 
 /* 烏薩奇動態區 */
-.header-deco { margin-bottom: 15px; }
 .usagi-icon {
     width: 160px; height: auto; cursor: pointer;
     animation: bounce 0.6s infinite alternate;
@@ -49,51 +51,48 @@ body {
 
 /* 儀表板數據 */
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-.stat-box { padding: 15px; border-radius: 25px; border: 4px solid var(--usagi-dark); font-weight: bold; position: relative; }
+.stat-box { padding: 15px; border-radius: 25px; border: 4px solid var(--usagi-dark); }
 .stat-box.pink { background: var(--chiikawa-pink); }
 .stat-box.blue { background: var(--hachi-blue); }
-.stat-val { font-size: 36px; display: block; line-height: 1.2; }
-.stat-label { font-size: 15px; color: #795548; display: flex; align-items: center; justify-content: center; gap: 5px; }
+.stat-val { font-size: 38px; display: block; line-height: 1.2; }
+.stat-label { font-size: 16px; color: #795548; display: flex; align-items: center; justify-content: center; gap: 5px; }
 
 /* 討伐進度條 */
-.bar-outer { height: 26px; background: #f5f5f5; border: 4px solid var(--usagi-dark); border-radius: 13px; overflow: hidden; margin: 15px 0; position: relative; }
+.bar-outer { height: 28px; background: #f5f5f5; border: 4px solid var(--usagi-dark); border-radius: 14px; overflow: hidden; margin: 15px 0; position: relative; }
 .bar-inner { height: 100%; width: 0%; background: linear-gradient(90deg, #fff59d, #ffcc80); border-radius: 10px; }
 
-/* 🏆 重點：音樂圓鈕 ♫ */
+/* 音樂圓鈕 ♫ */
 .speaker-btn {
     display: inline-flex; align-items: center; justify-content: center;
-    width: 50px; height: 50px; background: #fffde7;
+    width: 52px; height: 52px; background: #fffde7;
     border: 4px solid var(--usagi-dark); border-radius: 50%;
     cursor: pointer; box-shadow: 0 5px 0 var(--accent-orange);
     vertical-align: middle; margin: 8px;
 }
 .speaker-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--accent-orange); }
-.speaker-btn::after { content: "♫"; font-size: 26px; color: var(--usagi-dark); }
+.speaker-btn::after { content: "♫"; font-size: 28px; color: var(--usagi-dark); font-weight: 900; }
 
-/* 文字顯示 */
-.word-text { font-size: 52px; font-weight: 900; margin: 10px 0; color: #4e342e; }
-.meaning-text { font-size: 28px; color: #8d6e63; font-weight: bold; background: #fff8e1; padding: 8px 20px; border-radius: 20px; display: inline-block; margin-bottom: 15px; border: 2px solid #ffe082; }
-.sentence-box { background: #fafafa; border: 4px dashed var(--accent-orange); padding: 20px; border-radius: 30px; margin-top: 15px; text-align: left; font-size: 20px; line-height: 1.5; color: #5d4037; }
+/* 文字顯示 - 單字特大特粗 */
+.word-text { font-size: 54px; margin: 10px 0; color: #4e342e; text-shadow: 1px 1px 0px #fff; }
+.meaning-text { font-size: 28px; color: #8d6e63; background: #fff8e1; padding: 10px 22px; border-radius: 22px; display: inline-block; margin-bottom: 15px; border: 3px solid #ffe082; }
+.sentence-box { background: #fafafa; border: 4px dashed var(--accent-orange); padding: 22px; border-radius: 32px; margin-top: 15px; text-align: left; font-size: 21px; line-height: 1.6; color: #5d4037; }
 
-/* 🚀 超大拼寫輸入框 */
+/* 超大拼寫輸入框 */
 #spelling-input {
-    width: 100%; padding: 22px; font-size: 36px; font-weight: 900;
-    border: 4px solid var(--usagi-dark); border-radius: 25px;
+    width: 100%; padding: 22px; font-size: 38px;
+    border: 5px solid var(--usagi-dark); border-radius: 25px;
     text-align: center; outline: none; margin: 15px 0;
     background: #fff; -webkit-appearance: none;
 }
-#spelling-input:focus { background: #fffde7; border-color: #ffb74d; }
 
-/* 遊戲功能按鈕 */
-button { width: 100%; padding: 20px; font-size: 24px; font-weight: 900; border-radius: 28px; border: 4px solid var(--usagi-dark); cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-.btn-yaha { background: var(--yaha-gold); box-shadow: 0 7px 0 var(--usagi-dark); }
+/* 遊戲功能按鈕 - 粗體強化 */
+button { width: 100%; padding: 22px; font-size: 26px; border-radius: 30px; border: 4px solid var(--usagi-dark); cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.btn-yaha { background: var(--yaha-gold); box-shadow: 0 8px 0 var(--usagi-dark); }
 .btn-yaha:active { transform: translateY(5px); box-shadow: 0 2px 0 var(--usagi-dark); }
-.btn-choice { background: white; margin-bottom: 15px; font-size: 22px; box-shadow: 0 5px 0 #eee; }
-.btn-choice:active { transform: translateY(3px); box-shadow: 0 1px 0 #eee; }
+.btn-choice { background: white; margin-bottom: 15px; font-size: 24px; box-shadow: 0 6px 0 #eee; }
 
-/* 裝飾標籤 */
-.badge { display: inline-block; padding: 8px 20px; border-radius: 15px; background: var(--accent-orange); font-weight: 900; margin-bottom: 15px; border: 3px solid var(--usagi-dark); font-size: 18px; }
-.icon-deco { font-style: normal; font-size: 24px; }
+.badge { display: inline-block; padding: 10px 24px; border-radius: 18px; background: var(--accent-orange); margin-bottom: 15px; border: 4px solid var(--usagi-dark); font-size: 20px; }
+.icon-deco { font-style: normal; font-size: 26px; }
 .hidden { display: none; }
 </style>
 </head>
@@ -109,12 +108,12 @@ button { width: 100%; padding: 20px; font-size: 24px; font-weight: 900; border-r
     </div>
 
     <div id="dashboard">
-        <h2 style="font-size:30px; margin-bottom:25px;">烏薩奇·單字討伐團</h2>
+        <h2 style="font-size:32px; margin-bottom:25px;">烏薩奇·單字討伐團</h2>
         <div class="stats-grid">
             <div class="stat-box pink"><span class="stat-label"><i class="icon-deco">⭐</i> 已討伐</span><span class="stat-val" id="stat-total">0</span></div>
             <div class="stat-box blue"><span class="stat-label"><i class="icon-deco">🔥</i> 連續天數</span><span class="stat-val" id="stat-streak">0</span></div>
         </div>
-        <div style="font-weight:900; font-size:18px;"><i class="icon-deco">🐾</i> 總討伐進度: <span id="progress-percent">0</span>%</div>
+        <div style="font-size:20px;"><i class="icon-deco">🐾</i> 總討伐進度: <span id="progress-percent">0</span>%</div>
         <div class="bar-outer"><div class="bar-inner" id="total-bar"></div></div>
         
         <button class="btn-yaha" onclick="initMission('daily')"><i class="icon-deco">🏹</i> 今日任務 (40字)</button>
@@ -124,7 +123,7 @@ button { width: 100%; padding: 20px; font-size: 24px; font-weight: 900; border-r
 
     <div id="study-zone" class="hidden">
         <div class="badge">預習時間！ (Puru!)</div>
-        <div style="font-weight:900; color:#8d6e63; font-size:22px; margin-bottom:10px;" id="study-progress">1 / 5</div>
+        <div style="color:#8d6e63; font-size:24px; margin-bottom:10px;" id="study-progress">1 / 5</div>
         <div class="word-text" id="study-word">Word</div>
         <div class="meaning-text" id="study-mean">意思</div>
         <div><div class="speaker-btn" id="study-word-speak"></div></div>
@@ -137,30 +136,30 @@ button { width: 100%; padding: 20px; font-size: 24px; font-weight: 900; border-r
 
     <div id="game-zone" class="hidden">
         <div id="mode-badge" class="badge">討伐中！</div>
-        <div id="timer-display" class="hidden" style="color:#d32f2f; font-size:24px; font-weight:900; margin-bottom:10px;">💨 時間: 60s</div>
-        <div id="quiz-progress" style="font-weight:900; margin-bottom:5px;">討伐進度: 1 / 5</div>
-        <div class="bar-outer" style="height:16px;"><div class="bar-inner" id="exam-bar"></div></div>
+        <div id="timer-display" class="hidden" style="color:#d32f2f; font-size:26px; margin-bottom:10px;">💨 時間: 60s</div>
+        <div id="quiz-progress" style="margin-bottom:5px;">討伐進度: 1 / 5</div>
+        <div class="bar-outer" style="height:18px;"><div class="bar-inner" id="exam-bar"></div></div>
         
         <div class="word-box">
             <div class="word-text"><span id="q-text">Word</span><div class="speaker-btn" onclick="triggerSpeak()"></div></div>
             <div class="meaning-text" id="q-sub">意思載入中...</div>
         </div>
-
         <div id="choices-area"></div>
         <input type="text" id="spelling-input" class="hidden" placeholder="拼拼看..." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
         <button id="confirm-btn" class="btn-yaha hidden" onclick="checkSpelling()">寫好了！ (Yaha!)</button>
     </div>
 
     <div id="finish-zone" class="hidden">
-        <h2 style="font-size:38px;">🎉 討伐成功！ 🎉</h2>
-        <div id="finish-stats" style="font-size:28px; line-height:2; font-weight:900; margin:20px 0;"></div>
+        <h2 style="font-size:40px;">🎉 討伐成功！</h2>
+        <div id="finish-stats" style="font-size:30px; line-height:2; margin:20px 0;"></div>
         <button class="btn-yaha" id="next-action-btn">下一組加油！</button>
-        <button onclick="location.reload()" style="background:none; border:none; text-decoration:underline; font-size:18px; margin-top:25px; cursor:pointer; color:#8d6e63; font-weight:bold;">回首頁</button>
+        <button onclick="location.reload()" style="background:none; border:none; text-decoration:underline; font-size:20px; margin-top:25px; cursor:pointer; color:#8d6e63;">回首頁</button>
     </div>
 </div>
 
 <script>
-// 單字資料庫 (你可以自行擴充至 2000 字)
+// 此處省略單字資料庫與邏輯部分，與前一版本相同
+// 確保 saveData, init, initMission 等功能完整運作...
 const rawData = `
 a,[冠詞] 一個;一種, I have a dream. (我有一個夢想。)
 a few,[片語] 一些, I have a few cookies in my bag. (我袋子裡有一些餅乾。)
@@ -2241,7 +2240,7 @@ zoo,[名詞] 動物園, We saw many animals at the zoo. (我們在動物園看�
 `;
 
 let db = [];
-let userStats = JSON.parse(localStorage.getItem('usagi_v9_data')) || { mastered: [], wrongCounts: {}, streak: 0, lastDate: null };
+let userStats = JSON.parse(localStorage.getItem('usagi_v11_data')) || { mastered: [], wrongCounts: {}, streak: 0, lastDate: null };
 let session = { mode: '', fullPool: [], groupIdx: 0, currentGroup: [], index: 0, correct: 0, wrong: 0, timer: null, timeLeft: 60 };
 
 function init() {
@@ -2265,8 +2264,7 @@ function initMission(mode) {
     if(mode === 'daily') session.fullPool = shuffle(db).slice(0, 40);
     else if(mode === 'review') session.fullPool = shuffle(db.filter(w => (userStats.wrongCounts[w.word] || 0) > 0)).slice(0, 20);
     else { session.fullPool = shuffle(db); startChallenge(); return; }
-
-    if(session.fullPool.length === 0) return alert("還沒有錯題紀錄喔，真棒！");
+    if(session.fullPool.length === 0) return alert("目前沒有錯題喔！");
     startNextGroup();
 }
 
@@ -2313,16 +2311,13 @@ function nextQuizQuestion() {
     document.getElementById('choices-area').innerHTML = "";
     document.getElementById('spelling-input').classList.add('hidden');
     document.getElementById('confirm-btn').classList.add('hidden');
-
     if(!isSpelling) {
         document.getElementById('q-text').innerText = q.word;
-        document.getElementById('q-sub').innerText = "選出意思！";
+        document.getElementById('q-sub').innerText = "選出正確意思！";
         let opts = shuffle(db.filter(x => x.word !== q.word)).slice(0, 3).concat(q);
         shuffle(opts).forEach(opt => {
-            let b = document.createElement('button');
-            b.className = "btn-choice";
-            b.innerText = opt.meaning;
-            b.onclick = () => handleAnswer(opt.word === q.word);
+            let b = document.createElement('button'); b.className = "btn-choice";
+            b.innerText = opt.meaning; b.onclick = () => handleAnswer(opt.word === q.word);
             document.getElementById('choices-area').appendChild(b);
         });
     } else {
@@ -2365,16 +2360,14 @@ function checkSpelling() {
 function showFinish() {
     document.querySelectorAll('.card > div:not(.header-deco)').forEach(d => d.classList.add('hidden'));
     document.getElementById('finish-zone').classList.remove('hidden');
-    document.getElementById('finish-stats').innerHTML = `<span style="color:#2e7d32">⭐ 成功：${session.correct}</span><br><span style="color:#d32f2f">🥕 失手：${session.wrong}</span>`;
+    document.getElementById('finish-stats').innerHTML = `<span style="color:#2e7d32">成功：${session.correct}</span><br><span style="color:#d32f2f">失手：${session.wrong}</span>`;
     session.groupIdx += 5;
     let btn = document.getElementById('next-action-btn');
     if(session.groupIdx >= session.fullPool.length) {
-        btn.innerText = "完成所有討伐！回首頁";
-        btn.onclick = () => location.reload();
+        btn.innerText = "全部完成！回首頁"; btn.onclick = () => location.reload();
         updateStreak();
     } else {
-        btn.innerText = "繼續下一組預習！";
-        btn.onclick = startNextGroup;
+        btn.innerText = "繼續下一組預習！"; btn.onclick = startNextGroup;
     }
 }
 
@@ -2388,8 +2381,7 @@ function updateStreak() {
 }
 
 function startChallenge() {
-    session.currentGroup = shuffle(db);
-    session.index = 0; session.correct = 0; session.wrong = 0; session.timeLeft = 60;
+    session.currentGroup = shuffle(db); session.index = 0; session.correct = 0; session.wrong = 0; session.timeLeft = 60;
     document.querySelectorAll('.card > div:not(.header-deco)').forEach(d => d.classList.add('hidden'));
     document.getElementById('game-zone').classList.remove('hidden');
     document.getElementById('timer-display').classList.remove('hidden');
@@ -2408,7 +2400,7 @@ function resetUsagi() {
 }
 function speak(t) { window.speechSynthesis.cancel(); let u = new SpeechSynthesisUtterance(t); u.lang = "en-US"; u.rate = 0.85; window.speechSynthesis.speak(u); }
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-function saveData() { localStorage.setItem('usagi_v9_data', JSON.stringify(userStats)); }
+function saveData() { localStorage.setItem('usagi_v11_data', JSON.stringify(userStats)); }
 function usagiSpeak() { document.getElementById('sound-usagi').play(); }
 
 init();
