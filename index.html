@@ -14,7 +14,7 @@
     --usagi-dark: #5d4037;
     --chiikawa-pink: #fce4ec;
     --hachi-blue: #e3f2fd;
-    --accent-orange: #ffb74d;
+    --accent-orange: #ffb74d; /* 蘿蔔橘 */
 }
 
 /* 全域手繪感設定 */
@@ -34,34 +34,38 @@ body {
     position: relative;
 }
 
-/* 烏薩奇樣式 */
+/* 頂部烏薩奇裝飾 */
 .header-deco {
-    display: flex; justify-content: center; align-items: center; margin-bottom: 20px;
+    display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px;
 }
 
+/* 中間烏薩奇左右跳動 */
 .usagi-icon {
-    width: 100px;
+    width: 120px;
     cursor: pointer;
-    animation: bounce 0.6s infinite alternate;
+    animation: jumpSide 1s infinite alternate;
     transition: 0.3s;
 }
 
+/* 左右跳動動畫 */
+@keyframes jumpSide {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+/* 答對抖動 */
 .usagi-shake {
     animation: shake 0.5s;
 }
 
-.usagi-gray {
-    filter: grayscale(100%);
-}
+/* 答錯變灰 */
+.usagi-gray { filter: grayscale(100%); }
 
-.usagi-bright {
-    filter: brightness(1.5);
-}
-
-@keyframes bounce {
-    from { transform: translateY(0) rotate(0deg); }
-    to { transform: translateY(-10px) rotate(5deg); }
-}
+/* 亮起效果 (可選) */
+.usagi-bright { filter: brightness(1.5); }
 
 @keyframes shake {
     0% { transform: translateX(0); }
@@ -121,9 +125,9 @@ button {
 <body>
 
 <!-- 音效 -->
+<audio id="sound-click" src="https://lunakuo1719.github.io/vocab-app/uulalauula.mp3"></audio>
 <audio id="sound-correct" src="https://lunakuo1719.github.io/vocab-app/ula.mp3"></audio>
 <audio id="sound-wrong" src="https://lunakuo1719.github.io/vocab-app/ha.mp3"></audio>
-<audio id="sound-usagi" src="https://lunakuo1719.github.io/vocab-app/uulalauula.mp3"></audio>
 
 <div class="card">
     <div class="header-deco">
@@ -2264,6 +2268,7 @@ let db = [];
 let userStats = JSON.parse(localStorage.getItem('usagi_vocab_v1')) || { mastered: [], streak: 0, lastDate: null };
 let session = { fullPool: [], groupIndex: 0, currentGroup: [], index: 0, correct: 0, wrong: 0 };
 
+// 初始化資料庫
 function initDB() {
     db = rawData.trim().split("\n").map(line => {
         let p = line.split(",");
@@ -2272,6 +2277,7 @@ function initDB() {
     showDashboard();
 }
 
+// 顯示主畫面
 function showDashboard() {
     document.querySelectorAll('.card > div:not(.header-deco)').forEach(div => div.classList.add('hidden'));
     document.getElementById('dashboard').classList.remove('hidden');
@@ -2280,170 +2286,72 @@ function showDashboard() {
     let progress = Math.round((userStats.mastered.length / db.length) * 100) || 0;
     document.getElementById('total-bar').style.width = progress + "%";
     document.getElementById('progress-percent').innerText = progress;
-
-    // 恢復烏薩奇原狀
-    const usagi = document.getElementById('usagi');
-    usagi.className = "usagi-icon";
-    usagi.src = "https://lunakuo1719.github.io/vocab-app/usagi.gif";
 }
 
-function startDaily() {
-    session.fullPool = shuffle(db).slice(0, 40);
-    session.groupIndex = 0;
-    startNextGroup();
+// 點擊烏薩奇播放音效
+function usagiSpeak() {
+    const clickSound = document.getElementById('sound-click');
+    clickSound.currentTime = 0;
+    clickSound.play().catch(e=>{});
 }
 
-function startNextGroup() {
-    session.currentGroup = session.fullPool.slice(session.groupIndex, session.groupIndex + 5);
-    if (session.currentGroup.length === 0) return showDashboard();
-    session.index = 0;
-    session.correct = 0;
-    session.wrong = 0;
-    showStudy();
-}
+// 其他遊戲邏輯保持不變
+function startDaily() { session.fullPool = shuffle(db).slice(0, 40); session.groupIndex=0; startNextGroup(); }
+function startNextGroup() { session.currentGroup=session.fullPool.slice(session.groupIndex, session.groupIndex+5); if(session.currentGroup.length===0)return showDashboard(); session.index=0; session.correct=0; session.wrong=0; showStudy(); }
+function showStudy() { document.querySelectorAll('.card > div:not(.header-deco)').forEach(div=>div.classList.add('hidden')); document.getElementById('study-zone').classList.remove('hidden'); let q=session.currentGroup[session.index]; document.getElementById('study-progress').innerText=`${session.index+1}/5`; document.getElementById('study-word').innerText=q.word; document.getElementById('study-meaning').innerText=q.meaning; document.getElementById('study-sentence').innerText=q.sentence; speak(q.word); }
+function triggerSpeak(type){ let q=session.currentGroup[session.index]; if(type==='word'||type==='quiz') speak(q.word); else if(type==='sentence') speak(q.sentence.split('(')[0]); }
+function nextStudy(){ session.index++; if(session.index<session.currentGroup.length) showStudy(); else startQuiz(); }
+function startQuiz(){ session.index=0; document.querySelectorAll('.card > div:not(.header-deco)').forEach(div=>div.classList.add('hidden')); document.getElementById('game-zone').classList.remove('hidden'); document.getElementById('log').innerHTML=""; nextQuizQuestion(); }
+function nextQuizQuestion(){ if(session.index>=session.currentGroup.length) return showFinish(); let q=session.currentGroup[session.index]; let isChoose=Math.random()>0.4; document.getElementById('quiz-progress').innerText=`${session.index+1}/5`; document.getElementById('exam-bar').style.width=(session.index/5)*100+"%"; document.getElementById('q-text').innerText=isChoose?q.word:q.meaning; document.getElementById('q-speak').style.display=isChoose?"inline-block":"none"; let area=document.getElementById('choices-area'); let input=document.getElementById('spelling-input'); let btn=document.getElementById('confirm-btn'); area.innerHTML=""; input.classList.add('hidden'); btn.classList.add('hidden'); if(isChoose){ let opts=shuffle(db.filter(x=>x.word!==q.word)).slice(0,3).concat(q); shuffle(opts).forEach(opt=>{ let b=document.createElement('button'); b.className="btn-choice"; b.innerText=opt.meaning; b.onclick=()=>checkAnswer(opt.word===q.word); area.appendChild(b); }); }else{ input.classList.remove('hidden'); btn.classList.remove('hidden'); input.value=""; setTimeout(()=>input.focus(),300); } speak(q.word); }
 
-function showStudy() {
-    document.querySelectorAll('.card > div:not(.header-deco)').forEach(div => div.classList.add('hidden'));
-    document.getElementById('study-zone').classList.remove('hidden');
-    let q = session.currentGroup[session.index];
-    document.getElementById('study-progress').innerText = `${session.index + 1} / 5`;
-    document.getElementById('study-word').innerText = q.word;
-    document.getElementById('study-meaning').innerText = q.meaning;
-    document.getElementById('study-sentence').innerText = q.sentence;
-    speak(q.word);
-}
+function checkAnswer(isCorrect){
+    let q=session.currentGroup[session.index];
+    let finalCorrect=isCorrect;
+    if(isCorrect===undefined) finalCorrect=document.getElementById('spelling-input').value.trim().toLowerCase()===q.word.toLowerCase();
 
-function triggerSpeak(type) {
-    let q = session.currentGroup[session.index];
-    if (type === 'word' || type === 'quiz') speak(q.word);
-    else if (type === 'sentence') speak(q.sentence.split('(')[0]);
-}
+    const sound=document.getElementById(finalCorrect?'sound-correct':'sound-wrong');
+    sound.currentTime=0; sound.play().catch(e=>{});
 
-function nextStudy() {
-    session.index++;
-    if (session.index < session.currentGroup.length) showStudy();
-    else startQuiz();
-}
+    const usagi=document.getElementById('usagi');
+    usagi.classList.remove('usagi-shake','usagi-gray','usagi-bright');
 
-function startQuiz() {
-    session.index = 0;
-    document.querySelectorAll('.card > div:not(.header-deco)').forEach(div => div.classList.add('hidden'));
-    document.getElementById('game-zone').classList.remove('hidden');
-    document.getElementById('log').innerHTML = "";
-    nextQuizQuestion();
-}
-
-function nextQuizQuestion() {
-    if (session.index >= session.currentGroup.length) return showFinish();
-    let q = session.currentGroup[session.index];
-    let isChoose = Math.random() > 0.4; // 60% 選擇題
-    
-    document.getElementById('quiz-progress').innerText = `${session.index + 1} / 5`;
-    document.getElementById('exam-bar').style.width = (session.index / 5) * 100 + "%";
-    document.getElementById('q-text').innerText = isChoose ? q.word : q.meaning;
-    document.getElementById('q-speak').style.display = isChoose ? "inline-block" : "none";
-    
-    let area = document.getElementById('choices-area');
-    let input = document.getElementById('spelling-input');
-    let btn = document.getElementById('confirm-btn');
-    
-    area.innerHTML = "";
-    input.classList.add('hidden');
-    btn.classList.add('hidden');
-
-    if (isChoose) {
-        let opts = shuffle(db.filter(x => x.word !== q.word)).slice(0, 3).concat(q);
-        shuffle(opts).forEach(opt => {
-            let b = document.createElement('button');
-            b.className = "btn-choice";
-            b.innerText = opt.meaning;
-            b.onclick = () => checkAnswer(opt.word === q.word);
-            area.appendChild(b);
-        });
-    } else {
-        input.classList.remove('hidden');
-        btn.classList.remove('hidden');
-        input.value = "";
-        setTimeout(() => input.focus(), 300);
-    }
-    speak(q.word);
-}
-
-function checkAnswer(isCorrect) {
-    let q = session.currentGroup[session.index];
-    let finalCorrect = isCorrect;
-    if (isCorrect === undefined) {
-        finalCorrect = document.getElementById('spelling-input').value.trim().toLowerCase() === q.word.toLowerCase();
-    }
-
-    const usagi = document.getElementById('usagi');
-
-    if (finalCorrect) {
+    if(finalCorrect){
         session.correct++;
-        if (!userStats.mastered.includes(q.word)) userStats.mastered.push(q.word);
-        logMsg("✅ Yaha! " + q.word);
-
-        // 答對：抖動+亮起
-        usagi.className = "usagi-icon usagi-shake usagi-bright";
-        usagi.src = "https://lunakuo1719.github.io/vocab-app/usagi.gif";
-        const sound = document.getElementById('sound-correct');
-        sound.currentTime = 0; sound.play().catch(e => {});
-        setTimeout(() => usagi.className = "usagi-icon", 600);
-
-    } else {
+        if(!userStats.mastered.includes(q.word)) userStats.mastered.push(q.word);
+        logMsg("✅ Yaha! "+q.word);
+        usagi.classList.add('usagi-shake');
+    }else{
         session.wrong++;
-        logMsg("😢 Puru... " + q.word);
-
-        // 答錯：先抖動再變灰
-        usagi.className = "usagi-icon usagi-shake";
-        const sound = document.getElementById('sound-wrong');
-        sound.currentTime = 0; sound.play().catch(e => {});
-        setTimeout(() => {
-            usagi.className = "usagi-icon usagi-gray";
-            usagi.src = "https://lunakuo1719.github.io/vocab-app/usagi-ha.gif";
-        }, 500);
+        logMsg("😢 Puru... "+q.word);
+        usagi.classList.add('usagi-gray');
     }
 
     session.index++;
     saveData();
-    setTimeout(nextQuizQuestion, 600);
+    setTimeout(nextQuizQuestion,600);
 }
 
-function showFinish() {
-    document.querySelectorAll('.card > div:not(.header-deco)').forEach(div => div.classList.add('hidden'));
+function showFinish(){
+    document.querySelectorAll('.card > div:not(.header-deco)').forEach(div=>div.classList.add('hidden'));
     document.getElementById('finish-zone').classList.remove('hidden');
-    document.getElementById('finish-stats').innerText = `答對：${session.correct} | 答錯：${session.wrong}`;
-    session.groupIndex += 5;
-    
-    let btn = document.getElementById('next-group-btn');
-    if (session.groupIndex >= session.fullPool.length) {
-        btn.innerText = "全部討伐完畢！";
-        btn.onclick = showDashboard;
-    } else {
-        btn.innerText = "下一組！ (Yaha!)";
-        btn.onclick = startNextGroup;
+    document.getElementById('finish-stats').innerText=`答對：${session.correct} | 答錯：${session.wrong}`;
+    session.groupIndex+=5;
+    let btn=document.getElementById('next-group-btn');
+    if(session.groupIndex>=session.fullPool.length){
+        btn.innerText="全部討伐完畢！";
+        btn.onclick=showDashboard;
+    }else{
+        btn.innerText="下一組！ (Yaha!)";
+        btn.onclick=startNextGroup;
     }
 }
 
-function speak(t) {
-    window.speechSynthesis.cancel();
-    let u = new SpeechSynthesisUtterance(t);
-    u.lang = "en-US"; u.rate = 0.9;
-    window.speechSynthesis.speak(u);
-}
-
-function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-function logMsg(m) { document.getElementById('log').innerHTML = m + "<br>" + document.getElementById('log').innerHTML; }
-function saveData() { localStorage.setItem('usagi_vocab_v1', JSON.stringify(userStats)); }
-
-// 點擊烏薩奇播放專用音效
-function usagiSpeak() {
-    const audio = document.getElementById('sound-usagi');
-    audio.currentTime = 0; audio.play().catch(e => {});
-}
+function speak(t){ window.speechSynthesis.cancel(); let u=new SpeechSynthesisUtterance(t); u.lang="en-US"; u.rate=0.9; window.speechSynthesis.speak(u); }
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-0.5); }
+function logMsg(m){ document.getElementById('log').innerHTML=m+"<br>"+document.getElementById('log').innerHTML; }
+function saveData(){ localStorage.setItem('usagi_vocab_v1',JSON.stringify(userStats)); }
 
 initDB();
 </script>
 </body>
 </html>
-
