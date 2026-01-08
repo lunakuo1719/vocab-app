@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <title>單字討伐團！烏拉~</title>
 
+<link rel="apple-touch-icon" href="https://lunakuo1719.github.io/vocab-app/word.jpeg"> <meta name="apple-mobile-web-app-title" content="單字討伐團">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
 <link rel="icon" href="https://lunakuo1719.github.io/vocab-app/usagi.gif" type="image/gif">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/naenon/open-huninn-font@1.1/font.css">
 
@@ -23,12 +27,16 @@
     font-family: 'openhuninn', sans-serif; 
     font-weight: 900; 
     transition: 0.2s; 
+    /* 避免 iPhone 點擊時出現灰框 */
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
     margin: 0; padding: 10px; background-color: var(--usagi-yellow);
     display: flex; justify-content: center; align-items: center; min-height: 100vh;
     color: var(--usagi-dark);
+    /* 禁止 iPhone 頁面上下彈跳 */
+    overscroll-behavior-y: contain;
 }
 
 .card {
@@ -39,25 +47,14 @@ body {
     position: relative; text-align: center;
 }
 
-/* 🚀 新增：返回首頁按鈕樣式 */
 .home-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 45px;
-    height: 45px;
-    background: white;
-    border: 3px solid var(--usagi-dark);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    cursor: pointer;
-    box-shadow: 0 4px 0 var(--accent-orange);
-    z-index: 100;
+    position: absolute; top: 20px; right: 20px;
+    width: 45px; height: 45px; background: white;
+    border: 3px solid var(--usagi-dark); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; cursor: pointer;
+    box-shadow: 0 4px 0 var(--accent-orange); z-index: 100;
 }
-.home-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--accent-orange); }
 
 .usagi-icon {
     width: 160px; height: auto; cursor: pointer;
@@ -84,7 +81,6 @@ body {
     cursor: pointer; box-shadow: 0 5px 0 var(--accent-orange);
     vertical-align: middle; margin: 8px;
 }
-.speaker-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--accent-orange); }
 .speaker-btn::after { content: "♫"; font-size: 28px; color: var(--usagi-dark); font-weight: 900; }
 
 .word-text { font-size: 54px; margin: 10px 0; color: #4e342e; text-shadow: 1px 1px 0px #fff; }
@@ -164,7 +160,7 @@ button { width: 100%; padding: 22px; font-size: 26px; border-radius: 30px; borde
         </div>
         <div id="choices-area"></div>
         <div id="spelling-area" class="hidden">
-            <input type="text" id="spelling-input" placeholder="拼拼看..." autocomplete="off">
+            <input type="text" id="spelling-input" placeholder="拼拼看..." autocomplete="off" autocorrect="off">
             <div id="answer-hint" class="answer-hint-box hidden">
                 <div style="font-size:16px; color:#d32f2f;">加油！正確答案是：</div>
                 <div id="hint-text" style="font-size:36px; color:#b71c1c;">WORD</div>
@@ -177,19 +173,17 @@ button { width: 100%; padding: 22px; font-size: 26px; border-radius: 30px; borde
     <div id="finish-zone" class="hidden">
         <h2 style="font-size:40px;">🎉 討伐結果</h2>
         <div id="finish-stats" style="font-size:30px; line-height:2; margin:20px 0;"></div>
-        
         <div id="wrong-review-area" class="hidden">
             <div style="color:#d32f2f; margin-bottom:15px; font-size:20px;">需要再加強的單字：</div>
             <div id="wrong-list" style="margin-bottom: 20px;"></div>
             <button class="btn-yaha" onclick="retryGroupWrongs()">🔥 再次挑戰錯題</button>
         </div>
-
         <button class="btn-yaha" id="next-action-btn">下一組加油！</button>
-        <button onclick="goBackHome()" style="background:none; border:none; text-decoration:underline; font-size:20px; margin-top:25px; cursor:pointer; color:#8d6e63;">不考了，回首頁</button>
     </div>
 </div>
 
 <script>
+// 單字資料庫與邏輯 (延續前版本)
 const rawData = `
 a,[冠詞] 一個;一種, I have a dream. (我有一個夢想。)
 a few,[片語] 一些, I have a few cookies in my bag. (我袋子裡有一些餅乾。)
@@ -2281,10 +2275,9 @@ function init() {
     updateDashboard();
 }
 
-// 🚀 新增：返回首頁邏輯
 function goBackHome() {
-    if(session.timer) clearInterval(session.timer); // 停止限時挑戰計時
-    window.speechSynthesis.cancel(); // 停止發音
+    if(session.timer) clearInterval(session.timer);
+    window.speechSynthesis.cancel();
     document.querySelectorAll('.card > div:not(.header-deco)').forEach(d => d.classList.add('hidden'));
     document.getElementById('dashboard').classList.remove('hidden');
     document.getElementById('back-home-btn').classList.add('hidden');
@@ -2301,15 +2294,11 @@ function updateDashboard() {
 
 function initMission(mode) {
     session.mode = mode; session.groupIdx = 0;
-    document.getElementById('back-home-btn').classList.remove('hidden'); // 顯示返回按鈕
+    document.getElementById('back-home-btn').classList.remove('hidden');
     if(mode === 'daily') session.fullPool = shuffle(db).slice(0, 40);
     else if(mode === 'review') session.fullPool = shuffle(db.filter(w => (userStats.wrongCounts[w.word] || 0) > 0)).slice(0, 20);
     else { session.fullPool = shuffle(db); startChallenge(); return; }
-    if(session.fullPool.length === 0) {
-        alert("目前沒有錯題喔！");
-        goBackHome();
-        return;
-    }
+    if(session.fullPool.length === 0) { alert("目前沒有錯題喔！"); goBackHome(); return; }
     startNextGroup();
 }
 
@@ -2352,17 +2341,13 @@ function nextQuizQuestion() {
     document.getElementById('answer-hint').classList.add('hidden');
     document.getElementById('confirm-btn').classList.remove('hidden');
     document.getElementById('memorized-btn').classList.add('hidden');
-    
     if(session.index >= session.currentGroup.length && session.mode !== 'challenge') return showFinish();
-    
     let q = session.currentGroup[session.index];
     let isSpelling = Math.random() > 0.5 && session.mode !== 'challenge';
-    
     document.getElementById('quiz-progress').innerText = `本組進度: ${session.index + 1} / ${session.currentGroup.length}`;
     document.getElementById('exam-bar').style.width = (session.index / session.currentGroup.length) * 100 + "%";
     document.getElementById('choices-area').innerHTML = "";
     document.getElementById('spelling-area').classList.add('hidden');
-
     if(!isSpelling) {
         document.getElementById('q-text').innerText = q.word;
         document.getElementById('q-sub').innerText = "選出正確意思！";
@@ -2385,16 +2370,10 @@ function nextQuizQuestion() {
 function checkSpelling() {
     let q = session.currentGroup[session.index];
     let isCorrect = document.getElementById('spelling-input').value.trim().toLowerCase() === q.word.toLowerCase();
-    
-    if(isCorrect) {
-        handleAnswer(true);
-    } else {
+    if(isCorrect) handleAnswer(true);
+    else {
         session.wrongAttempts++;
         document.getElementById('sound-wrong').play();
-        const inputField = document.getElementById('spelling-input');
-        inputField.style.borderColor = "red";
-        setTimeout(() => inputField.style.borderColor = "var(--usagi-dark)", 500);
-
         if(session.wrongAttempts >= 2) {
             document.getElementById('answer-hint').classList.remove('hidden');
             document.getElementById('hint-text').innerText = q.word;
@@ -2405,27 +2384,23 @@ function checkSpelling() {
     }
 }
 
-function proceedAfterHint() {
-    handleAnswer(false);
-}
+function proceedAfterHint() { handleAnswer(false); }
 
 function handleAnswer(isCorrect) {
     let q = session.currentGroup[session.index];
-    const usagi = document.getElementById('usagi');
     if(isCorrect) {
         session.correct++;
         if(!userStats.mastered.includes(q.word)) userStats.mastered.push(q.word);
-        usagi.className = "usagi-icon usagi-shake";
+        document.getElementById('usagi').className = "usagi-icon usagi-shake";
         document.getElementById('sound-correct').play();
     } else {
         session.wrong++;
         userStats.wrongCounts[q.word] = (userStats.wrongCounts[q.word] || 0) + 1;
         if(!session.groupWrongWords.includes(q)) session.groupWrongWords.push(q);
         document.getElementById('sound-wrong').play();
-        usagi.src = "https://lunakuo1719.github.io/vocab-app/usagi-ha.gif";
+        document.getElementById('usagi').src = "https://lunakuo1719.github.io/vocab-app/usagi-ha.gif";
     }
-    session.index++;
-    saveData();
+    session.index++; saveData();
     setTimeout(nextQuizQuestion, 1000);
 }
 
@@ -2433,16 +2408,12 @@ function showFinish() {
     document.querySelectorAll('.card > div:not(.header-deco):not(#back-home-btn)').forEach(d => d.classList.add('hidden'));
     document.getElementById('finish-zone').classList.remove('hidden');
     document.getElementById('finish-stats').innerHTML = `<span style="color:#2e7d32">成功：${session.correct}</span><br><span style="color:#d32f2f">失手：${session.wrong}</span>`;
-    
     if(session.groupWrongWords.length > 0) {
         document.getElementById('wrong-review-area').classList.remove('hidden');
         document.getElementById('next-action-btn').classList.add('hidden');
         let listHtml = "";
         session.groupWrongWords.forEach(w => {
-            listHtml += `<div class="review-item">
-                <div><b>${w.word}</b><br><small>${w.meaning}</small></div>
-                <div class="speaker-btn mini-speaker" onclick="speak('${w.word}')"></div>
-            </div>`;
+            listHtml += `<div class="review-item"><div><b>${w.word}</b><br><small>${w.meaning}</small></div><div class="speaker-btn mini-speaker" onclick="speak('${w.word}')"></div></div>`;
         });
         document.getElementById('wrong-list').innerHTML = listHtml;
     } else {
@@ -2454,10 +2425,7 @@ function showFinish() {
 
 function retryGroupWrongs() {
     session.currentGroup = [...session.groupWrongWords];
-    session.groupWrongWords = [];
-    session.index = 0;
-    session.correct = 0;
-    session.wrong = 0;
+    session.groupWrongWords = []; session.index = 0; session.correct = 0; session.wrong = 0;
     startQuiz();
 }
 
@@ -2477,8 +2445,7 @@ function updateStreak() {
     let today = new Date().toLocaleDateString();
     if (userStats.lastDate !== today && session.mode === 'daily') {
         userStats.streak = (userStats.streak || 0) + 1;
-        userStats.lastDate = today;
-        saveData();
+        userStats.lastDate = today; saveData();
     }
 }
 function startChallenge() {
@@ -2494,11 +2461,7 @@ function startChallenge() {
     }, 1000);
     nextQuizQuestion();
 }
-function resetUsagi() {
-    const usagi = document.getElementById('usagi');
-    usagi.className = "usagi-icon";
-    usagi.src = "https://lunakuo1719.github.io/vocab-app/usagi.gif";
-}
+function resetUsagi() { document.getElementById('usagi').className = "usagi-icon"; document.getElementById('usagi').src = "https://lunakuo1719.github.io/vocab-app/usagi.gif"; }
 function speak(t) { window.speechSynthesis.cancel(); let u = new SpeechSynthesisUtterance(t); u.lang = "en-US"; u.rate = 0.85; window.speechSynthesis.speak(u); }
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 function saveData() { localStorage.setItem('usagi_v11_data', JSON.stringify(userStats)); }
