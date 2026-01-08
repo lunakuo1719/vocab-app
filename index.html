@@ -10,11 +10,11 @@
 
 <style>
 :root {
-    --usagi-yellow: #fff9c4;
+    --usagi-yellow: #fffde7;
     --usagi-dark: #5d4037;
-    --chiikawa-pink: #fce4ec;
-    --hachi-blue: #e3f2fd;
-    --accent-orange: #ffb74d; /* 蘿蔔橘 */
+    --chiikawa-pink: #ffebee;
+    --hachi-blue: #e1f5fe;
+    --accent-orange: #ffcc80;
 }
 
 /* 全域手繪感設定 */
@@ -30,104 +30,108 @@ body {
     width: 100%; max-width: 500px; background: white;
     border: 4px solid var(--usagi-dark);
     border-radius: 40px; padding: 25px;
-    box-shadow: 8px 8px 0px var(--accent-orange);
+    box-shadow: 0px 10px 0px var(--accent-orange);
     position: relative;
 }
 
-/* 頂部烏薩奇裝飾 */
 .header-deco {
-    display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px;
+    display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px;
 }
+.deco-symbol { font-size: 24px; filter: drop-shadow(2px 2px 0px #fff); }
 
-/* 中間烏薩奇左右跳動 */
 .usagi-icon {
-    width: 120px;
+    width: 100px; height: auto;
     cursor: pointer;
-    animation: jumpSide 1s infinite alternate;
-    transition: 0.3s;
+    animation: bounce 0.6s infinite alternate;
 }
 
-/* 左右跳動動畫 */
-@keyframes jumpSide {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    50% { transform: translateX(10px); }
-    75% { transform: translateX(-10px); }
-    100% { transform: translateX(0); }
+.usagi-shake { animation: shake 0.5s; }
+.usagi-gray { filter: grayscale(100%); opacity: 0.7; }
+.usagi-bright { filter: brightness(1.2) drop-shadow(0 0 10px #fff176); }
+
+@keyframes bounce {
+    from { transform: translateY(0) rotate(0deg); }
+    to { transform: translateY(-10px) rotate(3deg); }
 }
-
-/* 答對抖動 */
-.usagi-shake {
-    animation: shake 0.5s;
-}
-
-/* 答錯變灰 */
-.usagi-gray { filter: grayscale(100%); }
-
-/* 亮起效果 (可選) */
-.usagi-bright { filter: brightness(1.5); }
 
 @keyframes shake {
     0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
+    25% { transform: translateX(-8px); }
+    50% { transform: translateX(8px); }
+    75% { transform: translateX(-8px); }
     100% { transform: translateX(0); }
 }
 
-/* 儀表板樣式 */
 .stats-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
 .stat-box {
     padding: 15px; border-radius: 25px; border: 3px solid var(--usagi-dark);
     text-align: center; font-weight: bold;
 }
-.stat-box.pink { background-color: var(--chiikawa-pink); }
-.stat-box.blue { background-color: var(--hachi-blue); }
-.stat-val { font-size: 32px; display: block; }
+.stat-box.pink { background-color: var(--chiikawa-pink); box-shadow: 0 4px 0px #f8bbd0; }
+.stat-box.blue { background-color: var(--hachi-blue); box-shadow: 0 4px 0px #b3e5fc; }
+.stat-val { font-size: 36px; display: block; }
+.stat-label { font-size: 14px; opacity: 0.8; }
 
-/* 進度條 */
 .progress-area { margin-bottom: 20px; text-align: center; font-weight: bold; }
 .bar-outer { 
-    height: 24px; background: #eee; border: 3px solid var(--usagi-dark); 
-    border-radius: 12px; overflow: hidden; margin-top: 5px;
+    height: 22px; background: #f5f5f5; border: 3px solid var(--usagi-dark); 
+    border-radius: 11px; overflow: hidden; margin-top: 8px;
 }
-.bar-inner { height: 100%; width: 0%; background: linear-gradient(90deg, #fff176, var(--accent-orange)); }
+.bar-inner { height: 100%; width: 0%; background: linear-gradient(90deg, #fff176, #ffb74d); }
 
-/* 內容顯示區 */
-.word-box { text-align: center; margin: 30px 0; }
-.word-text { font-size: 48px; font-weight: 900; margin-bottom: 10px; display: inline-block;}
-.meaning-text { font-size: 26px; color: #795548; font-weight: bold; }
+.word-box { text-align: center; margin: 25px 0; }
+.word-text { font-size: 52px; font-weight: 900; margin-bottom: 5px; }
+.meaning-text { font-size: 24px; color: #8d6e63; font-weight: bold; background: #fdf5e6; display: inline-block; padding: 2px 15px; border-radius: 10px; }
 
 .sentence-area {
-    background: #fffef2; border: 2px dashed var(--accent-orange);
-    padding: 15px; border-radius: 20px; margin-top: 20px; line-height: 1.6;
-    position: relative;
+    background: #fffdf0; border: 2.5px dashed var(--accent-orange);
+    padding: 18px; border-radius: 24px; margin-top: 25px; line-height: 1.5;
+    font-size: 19px; text-align: left;
 }
 
-/* 按鈕樣式 */
+/* 修正後的輸入框樣式 */
+#spelling-input {
+    width: 100%;
+    padding: 18px;
+    font-size: 32px; /* 字體加大 */
+    border-radius: 22px;
+    border: 4px solid var(--usagi-dark);
+    background: #fff;
+    color: var(--usagi-dark);
+    text-align: center;
+    outline: none;
+    margin: 20px 0;
+    font-weight: bold;
+    box-shadow: inset 0 4px 6px rgba(0,0,0,0.05);
+}
+#spelling-input:focus {
+    border-color: #ffb74d;
+    background: #fffef0;
+}
+
 button {
-    width: 100%; padding: 18px; font-size: 22px; font-weight: 900;
-    border-radius: 20px; border: 3px solid var(--usagi-dark);
+    width: 100%; padding: 16px; font-size: 22px; font-weight: 900;
+    border-radius: 22px; border: 3px solid var(--usagi-dark);
     cursor: pointer; margin-top: 15px;
 }
 .btn-yaha { background: #fff176; box-shadow: 0 6px 0 var(--usagi-dark); }
 .btn-yaha:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--usagi-dark); }
 
-.btn-choice { background: white; margin-bottom: 10px; font-size: 20px; }
+.btn-choice { background: white; margin-bottom: 12px; font-size: 20px; }
 .btn-choice:hover { background: var(--hachi-blue); }
 
-.speaker { cursor: pointer; font-size: 28px; vertical-align: middle; padding: 5px; }
+.speaker { cursor: pointer; font-size: 30px; vertical-align: middle; margin-left: 8px; }
+.speaker:active { transform: scale(1.2); }
 
 .hidden { display: none; }
-#log { margin-top: 20px; font-size: 14px; text-align: center; color: #8d6e63; }
+#log { margin-top: 20px; font-size: 15px; text-align: center; color: #a1887f; font-weight: bold; }
 </style>
 </head>
 <body>
 
-<!-- 音效 -->
-<audio id="sound-click" src="https://lunakuo1719.github.io/vocab-app/uulalauula.mp3"></audio>
 <audio id="sound-correct" src="https://lunakuo1719.github.io/vocab-app/ula.mp3"></audio>
 <audio id="sound-wrong" src="https://lunakuo1719.github.io/vocab-app/ha.mp3"></audio>
+<audio id="sound-usagi" src="https://lunakuo1719.github.io/vocab-app/uulalauula.mp3"></audio>
 
 <div class="card">
     <div class="header-deco">
@@ -135,26 +139,26 @@ button {
     </div>
 
     <div id="dashboard">
-        <h2 style="text-align:center;">單字討伐團！ Yaha!</h2>
+        <h2 style="text-align:center; margin-top:0;">單字討伐團！ Yaha!</h2>
         <div class="stats-container">
             <div class="stat-box pink"><span class="stat-val" id="stat-total">0</span>已學會</div>
             <div class="stat-box blue"><span class="stat-val" id="stat-streak">0</span>加油天數</div>
         </div>
         <div class="progress-area">
-            <span>討伐總進度 <span id="progress-percent">0</span>%</span>
+            <span>✨ 討伐進度 <span id="progress-percent">0</span>% ✨</span>
             <div class="bar-outer"><div class="bar-inner" id="total-bar"></div></div>
         </div>
         <button class="btn-yaha" onclick="startDaily()">咿呀哈！開始練習</button>
     </div>
 
     <div id="study-zone" class="hidden">
-        <div style="text-align:center; font-weight:bold;">✨ 預習時間 (Puru!) <span id="study-progress">1/5</span></div>
+        <div style="text-align:center; font-weight:bold; color: #8d6e63;">✨ 預習 (Puru!) <span id="study-progress">1/5</span></div>
         <div class="word-box">
-            <div class="word-text" id="study-word">Apple</div>
-            <span class="speaker" onclick="triggerSpeak('word')">🔊</span>
-            <div class="meaning-text" id="study-meaning">[名詞] 蘋果</div>
+            <div class="word-text" id="study-word">Word</div>
+            <span class="speaker" onclick="triggerSpeak('word')">🔊</span><br>
+            <div class="meaning-text" id="study-meaning">意思</div>
             <div class="sentence-area">
-                <span id="study-sentence">I eat an apple. (我吃蘋果)</span>
+                <span id="study-sentence">Sentence</span>
                 <span class="speaker" onclick="triggerSpeak('sentence')">🔊</span>
             </div>
         </div>
@@ -162,15 +166,22 @@ button {
     </div>
 
     <div id="game-zone" class="hidden">
-        <div style="text-align:center; font-weight:bold;">🎯 正式討伐！ <span id="quiz-progress">1/5</span></div>
-        <div class="bar-outer" style="height:12px;"><div class="bar-inner" id="exam-bar"></div></div>
+        <div style="text-align:center; font-weight:bold; color: #8d6e63;">🎯 正式討伐！ <span id="quiz-progress">1/5</span></div>
+        <div class="bar-outer" style="height:12px; margin-top:15px;"><div class="bar-inner" id="exam-bar"></div></div>
         <div class="word-box">
-            <div class="word-text" id="q-text">Apple</div>
+            <div class="word-text" id="q-text" style="font-size: 40px;">Question</div>
             <span class="speaker" id="q-speak" onclick="triggerSpeak('quiz')">🔊</span>
-            <div style="margin-top:10px; font-weight:bold; color:#8d6e63;">這是什麼意思呢？</div>
+            <div style="margin-top:15px; font-weight:bold; color:#a1887f;">這是什麼意思呢？</div>
         </div>
         <div id="choices-area"></div>
-        <input type="text" id="spelling-input" class="hidden" placeholder="拼拼看...">
+        
+        <input type="text" id="spelling-input" class="hidden" 
+               placeholder="請拼寫..." 
+               autocomplete="off" 
+               autocorrect="off" 
+               autocapitalize="none" 
+               spellcheck="false">
+               
         <button id="confirm-btn" class="btn-yaha hidden" onclick="checkAnswer()">我寫好了！</button>
         <div id="log"></div>
     </div>
@@ -178,13 +189,12 @@ button {
     <div id="finish-zone" class="hidden" style="text-align:center;">
         <h2 style="font-size:32px;">🎉 討伐成功！ 🎉</h2>
         <div id="finish-stats" style="font-size:24px; margin:20px 0; font-weight:bold;"></div>
-        <button class="btn-yaha" id="next-group-btn">繼續下一組 (Yaha!)</button>
+        <button class="btn-yaha" id="next-group-btn">下一組加油！</button>
         <button onclick="showDashboard()" style="background:none; border:none; color:#8d6e63; text-decoration:underline; margin-top:20px;">回首頁</button>
     </div>
 </div>
 
 <script>
-// 單字資料庫
 const rawData = `
 a,[冠詞] 一個;一種, I have a dream. (我有一個夢想。)
 a few,[片語] 一些, I have a few cookies in my bag. (我袋子裡有一些餅乾。)
@@ -2268,7 +2278,6 @@ let db = [];
 let userStats = JSON.parse(localStorage.getItem('usagi_vocab_v1')) || { mastered: [], streak: 0, lastDate: null };
 let session = { fullPool: [], groupIndex: 0, currentGroup: [], index: 0, correct: 0, wrong: 0 };
 
-// 初始化資料庫
 function initDB() {
     db = rawData.trim().split("\n").map(line => {
         let p = line.split(",");
@@ -2277,7 +2286,6 @@ function initDB() {
     showDashboard();
 }
 
-// 顯示主畫面
 function showDashboard() {
     document.querySelectorAll('.card > div:not(.header-deco)').forEach(div => div.classList.add('hidden'));
     document.getElementById('dashboard').classList.remove('hidden');
@@ -2286,71 +2294,149 @@ function showDashboard() {
     let progress = Math.round((userStats.mastered.length / db.length) * 100) || 0;
     document.getElementById('total-bar').style.width = progress + "%";
     document.getElementById('progress-percent').innerText = progress;
+    const usagi = document.getElementById('usagi');
+    usagi.className = "usagi-icon";
+    usagi.src = "https://lunakuo1719.github.io/vocab-app/usagi.gif";
 }
 
-// 點擊烏薩奇播放音效
-function usagiSpeak() {
-    const clickSound = document.getElementById('sound-click');
-    clickSound.currentTime = 0;
-    clickSound.play().catch(e=>{});
+function startDaily() {
+    session.fullPool = shuffle(db).slice(0, 40);
+    session.groupIndex = 0;
+    startNextGroup();
 }
 
-// 其他遊戲邏輯保持不變
-function startDaily() { session.fullPool = shuffle(db).slice(0, 40); session.groupIndex=0; startNextGroup(); }
-function startNextGroup() { session.currentGroup=session.fullPool.slice(session.groupIndex, session.groupIndex+5); if(session.currentGroup.length===0)return showDashboard(); session.index=0; session.correct=0; session.wrong=0; showStudy(); }
-function showStudy() { document.querySelectorAll('.card > div:not(.header-deco)').forEach(div=>div.classList.add('hidden')); document.getElementById('study-zone').classList.remove('hidden'); let q=session.currentGroup[session.index]; document.getElementById('study-progress').innerText=`${session.index+1}/5`; document.getElementById('study-word').innerText=q.word; document.getElementById('study-meaning').innerText=q.meaning; document.getElementById('study-sentence').innerText=q.sentence; speak(q.word); }
-function triggerSpeak(type){ let q=session.currentGroup[session.index]; if(type==='word'||type==='quiz') speak(q.word); else if(type==='sentence') speak(q.sentence.split('(')[0]); }
-function nextStudy(){ session.index++; if(session.index<session.currentGroup.length) showStudy(); else startQuiz(); }
-function startQuiz(){ session.index=0; document.querySelectorAll('.card > div:not(.header-deco)').forEach(div=>div.classList.add('hidden')); document.getElementById('game-zone').classList.remove('hidden'); document.getElementById('log').innerHTML=""; nextQuizQuestion(); }
-function nextQuizQuestion(){ if(session.index>=session.currentGroup.length) return showFinish(); let q=session.currentGroup[session.index]; let isChoose=Math.random()>0.4; document.getElementById('quiz-progress').innerText=`${session.index+1}/5`; document.getElementById('exam-bar').style.width=(session.index/5)*100+"%"; document.getElementById('q-text').innerText=isChoose?q.word:q.meaning; document.getElementById('q-speak').style.display=isChoose?"inline-block":"none"; let area=document.getElementById('choices-area'); let input=document.getElementById('spelling-input'); let btn=document.getElementById('confirm-btn'); area.innerHTML=""; input.classList.add('hidden'); btn.classList.add('hidden'); if(isChoose){ let opts=shuffle(db.filter(x=>x.word!==q.word)).slice(0,3).concat(q); shuffle(opts).forEach(opt=>{ let b=document.createElement('button'); b.className="btn-choice"; b.innerText=opt.meaning; b.onclick=()=>checkAnswer(opt.word===q.word); area.appendChild(b); }); }else{ input.classList.remove('hidden'); btn.classList.remove('hidden'); input.value=""; setTimeout(()=>input.focus(),300); } speak(q.word); }
+function startNextGroup() {
+    session.currentGroup = session.fullPool.slice(session.groupIndex, session.groupIndex + 5);
+    if (session.currentGroup.length === 0) return showDashboard();
+    session.index = 0; session.correct = 0; session.wrong = 0;
+    showStudy();
+}
 
-function checkAnswer(isCorrect){
-    let q=session.currentGroup[session.index];
-    let finalCorrect=isCorrect;
-    if(isCorrect===undefined) finalCorrect=document.getElementById('spelling-input').value.trim().toLowerCase()===q.word.toLowerCase();
+function showStudy() {
+    const usagi = document.getElementById('usagi');
+    usagi.className = "usagi-icon";
+    usagi.src = "https://lunakuo1719.github.io/vocab-app/usagi.gif";
+    document.querySelectorAll('.card > div:not(.header-deco)').forEach(div => div.classList.add('hidden'));
+    document.getElementById('study-zone').classList.remove('hidden');
+    let q = session.currentGroup[session.index];
+    document.getElementById('study-progress').innerText = `${session.index + 1} / 5`;
+    document.getElementById('study-word').innerText = q.word;
+    document.getElementById('study-meaning').innerText = q.meaning;
+    document.getElementById('study-sentence').innerText = q.sentence;
+    speak(q.word);
+}
 
-    const sound=document.getElementById(finalCorrect?'sound-correct':'sound-wrong');
-    sound.currentTime=0; sound.play().catch(e=>{});
+function triggerSpeak(type) {
+    let q = session.currentGroup[session.index];
+    if (type === 'word' || type === 'quiz') speak(q.word);
+    else if (type === 'sentence') speak(q.sentence.split('(')[0]);
+}
 
-    const usagi=document.getElementById('usagi');
-    usagi.classList.remove('usagi-shake','usagi-gray','usagi-bright');
-
-    if(finalCorrect){
-        session.correct++;
-        if(!userStats.mastered.includes(q.word)) userStats.mastered.push(q.word);
-        logMsg("✅ Yaha! "+q.word);
-        usagi.classList.add('usagi-shake');
-    }else{
-        session.wrong++;
-        logMsg("😢 Puru... "+q.word);
-        usagi.classList.add('usagi-gray');
-    }
-
+function nextStudy() {
     session.index++;
-    saveData();
-    setTimeout(nextQuizQuestion,600);
+    if (session.index < session.currentGroup.length) showStudy();
+    else startQuiz();
 }
 
-function showFinish(){
-    document.querySelectorAll('.card > div:not(.header-deco)').forEach(div=>div.classList.add('hidden'));
+function startQuiz() {
+    session.index = 0;
+    document.querySelectorAll('.card > div:not(.header-deco)').forEach(div => div.classList.add('hidden'));
+    document.getElementById('game-zone').classList.remove('hidden');
+    document.getElementById('log').innerHTML = "";
+    nextQuizQuestion();
+}
+
+function nextQuizQuestion() {
+    const usagi = document.getElementById('usagi');
+    usagi.className = "usagi-icon";
+    usagi.src = "https://lunakuo1719.github.io/vocab-app/usagi.gif";
+    if (session.index >= session.currentGroup.length) return showFinish();
+    let q = session.currentGroup[session.index];
+    let isChoose = Math.random() > 0.4;
+    document.getElementById('quiz-progress').innerText = `${session.index + 1} / 5`;
+    document.getElementById('exam-bar').style.width = (session.index / 5) * 100 + "%";
+    document.getElementById('q-text').innerText = isChoose ? q.word : q.meaning;
+    document.getElementById('q-speak').style.display = isChoose ? "inline-block" : "none";
+    let area = document.getElementById('choices-area');
+    let input = document.getElementById('spelling-input');
+    let btn = document.getElementById('confirm-btn');
+    area.innerHTML = ""; input.classList.add('hidden'); btn.classList.add('hidden');
+    if (isChoose) {
+        let opts = shuffle(db.filter(x => x.word !== q.word)).slice(0, 3).concat(q);
+        shuffle(opts).forEach(opt => {
+            let b = document.createElement('button');
+            b.className = "btn-choice";
+            b.innerText = opt.meaning;
+            b.onclick = () => checkAnswer(opt.word === q.word);
+            area.appendChild(b);
+        });
+    } else {
+        input.classList.remove('hidden');
+        btn.classList.remove('hidden');
+        input.value = "";
+        setTimeout(() => input.focus(), 300);
+    }
+    speak(q.word);
+}
+
+function checkAnswer(isCorrect) {
+    let q = session.currentGroup[session.index];
+    let finalCorrect = isCorrect;
+    if (isCorrect === undefined) {
+        finalCorrect = document.getElementById('spelling-input').value.trim().toLowerCase() === q.word.toLowerCase();
+    }
+    const usagi = document.getElementById('usagi');
+    if (finalCorrect) {
+        session.correct++;
+        if (!userStats.mastered.includes(q.word)) userStats.mastered.push(q.word);
+        logMsg("✨ Yaha! " + q.word);
+        usagi.className = "usagi-icon usagi-shake usagi-bright";
+        const sound = document.getElementById('sound-correct');
+        sound.currentTime = 0; sound.play().catch(e => {});
+        setTimeout(() => usagi.className = "usagi-icon", 600);
+    } else {
+        session.wrong++;
+        logMsg("😢 Puru... " + q.word);
+        usagi.className = "usagi-icon usagi-shake";
+        const sound = document.getElementById('sound-wrong');
+        sound.currentTime = 0; sound.play().catch(e => {});
+        setTimeout(() => {
+            usagi.className = "usagi-icon usagi-gray";
+            usagi.src = "https://lunakuo1719.github.io/vocab-app/usagi-ha.gif";
+        }, 500);
+    }
+    session.index++; saveData();
+    setTimeout(nextQuizQuestion, 1000);
+}
+
+function showFinish() {
+    document.querySelectorAll('.card > div:not(.header-deco)').forEach(div => div.classList.add('hidden'));
     document.getElementById('finish-zone').classList.remove('hidden');
-    document.getElementById('finish-stats').innerText=`答對：${session.correct} | 答錯：${session.wrong}`;
-    session.groupIndex+=5;
-    let btn=document.getElementById('next-group-btn');
-    if(session.groupIndex>=session.fullPool.length){
-        btn.innerText="全部討伐完畢！";
-        btn.onclick=showDashboard;
-    }else{
-        btn.innerText="下一組！ (Yaha!)";
-        btn.onclick=startNextGroup;
+    document.getElementById('finish-stats').innerHTML = `本組討伐成功！<br>答對：${session.correct} | 答錯：${session.wrong}`;
+    session.groupIndex += 5;
+    let btn = document.getElementById('next-group-btn');
+    if (session.groupIndex >= session.fullPool.length) {
+        btn.innerText = "完成今天所有討伐！";
+        btn.onclick = showDashboard;
+    } else {
+        btn.innerText = "下一組加油！ (Yaha!)";
+        btn.onclick = startNextGroup;
     }
 }
 
-function speak(t){ window.speechSynthesis.cancel(); let u=new SpeechSynthesisUtterance(t); u.lang="en-US"; u.rate=0.9; window.speechSynthesis.speak(u); }
-function shuffle(arr){ return [...arr].sort(()=>Math.random()-0.5); }
-function logMsg(m){ document.getElementById('log').innerHTML=m+"<br>"+document.getElementById('log').innerHTML; }
-function saveData(){ localStorage.setItem('usagi_vocab_v1',JSON.stringify(userStats)); }
-
+function speak(t) {
+    window.speechSynthesis.cancel();
+    let u = new SpeechSynthesisUtterance(t);
+    u.lang = "en-US"; u.rate = 0.85;
+    window.speechSynthesis.speak(u);
+}
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+function logMsg(m) { document.getElementById('log').innerHTML = m + "<br>" + document.getElementById('log').innerHTML; }
+function saveData() { localStorage.setItem('usagi_vocab_v1', JSON.stringify(userStats)); }
+function usagiSpeak() {
+    const audio = document.getElementById('sound-usagi');
+    audio.currentTime = 0; audio.play().catch(e => {});
+}
 initDB();
 </script>
 </body>
