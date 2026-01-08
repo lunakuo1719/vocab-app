@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <title>單字討伐團！烏拉~</title>
 
-<link rel="apple-touch-icon" href="https://lunakuo1719.github.io/vocab-app/word.jpeg"> <meta name="apple-mobile-web-app-title" content="單字討伐團">
+<link rel="apple-touch-icon" href="https://lunakuo1719.github.io/vocab-app/word.jpeg">
+<meta name="apple-mobile-web-app-title" content="單字討伐團">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
@@ -22,21 +23,20 @@
     --yaha-gold: #fff176;
 }
 
+/* 全局粗體強化 */
 * { 
     box-sizing: border-box; 
     font-family: 'openhuninn', sans-serif; 
     font-weight: 900; 
     transition: 0.2s; 
-    /* 避免 iPhone 點擊時出現灰框 */
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent; /* 消除 iPhone 點擊灰框 */
 }
 
 body {
     margin: 0; padding: 10px; background-color: var(--usagi-yellow);
     display: flex; justify-content: center; align-items: center; min-height: 100vh;
     color: var(--usagi-dark);
-    /* 禁止 iPhone 頁面上下彈跳 */
-    overscroll-behavior-y: contain;
+    overscroll-behavior-y: contain; /* 防止 iPhone 下拉刷新 */
 }
 
 .card {
@@ -47,6 +47,7 @@ body {
     position: relative; text-align: center;
 }
 
+/* 返回首頁小圓鈕 */
 .home-btn {
     position: absolute; top: 20px; right: 20px;
     width: 45px; height: 45px; background: white;
@@ -55,6 +56,7 @@ body {
     font-size: 22px; cursor: pointer;
     box-shadow: 0 4px 0 var(--accent-orange); z-index: 100;
 }
+.home-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--accent-orange); }
 
 .usagi-icon {
     width: 160px; height: auto; cursor: pointer;
@@ -87,6 +89,7 @@ body {
 .meaning-text { font-size: 28px; color: #8d6e63; background: #fff8e1; padding: 10px 22px; border-radius: 22px; display: inline-block; margin-bottom: 15px; border: 3px solid #ffe082; }
 .sentence-box { background: #fafafa; border: 4px dashed var(--accent-orange); padding: 22px; border-radius: 32px; margin-top: 15px; text-align: left; font-size: 21px; line-height: 1.6; color: #5d4037; }
 
+/* 🚀 關鍵：最強防作弊輸入框 */
 #spelling-input {
     width: 100%; padding: 22px; font-size: 38px;
     border: 5px solid var(--usagi-dark); border-radius: 25px;
@@ -101,10 +104,7 @@ button { width: 100%; padding: 22px; font-size: 26px; border-radius: 30px; borde
 
 .answer-hint-box { background: #ffcdd2; padding: 15px; border-radius: 20px; border: 3px solid var(--usagi-dark); margin: 10px 0; }
 .review-item { display: flex; align-items: center; justify-content: space-between; background: #fff8e1; border: 3px solid var(--usagi-dark); padding: 12px 20px; border-radius: 20px; margin-bottom: 10px; text-align: left; }
-.mini-speaker { width: 40px; height: 40px; font-size: 20px; }
-
 .badge { display: inline-block; padding: 10px 24px; border-radius: 18px; background: var(--accent-orange); margin-bottom: 15px; border: 4px solid var(--usagi-dark); font-size: 20px; }
-.icon-deco { font-style: normal; font-size: 26px; }
 .hidden { display: none; }
 </style>
 </head>
@@ -124,15 +124,15 @@ button { width: 100%; padding: 22px; font-size: 26px; border-radius: 30px; borde
     <div id="dashboard">
         <h2 style="font-size:32px; margin-bottom:25px;">單字討伐團！烏拉~</h2>
         <div class="stats-grid">
-            <div class="stat-box pink"><span class="stat-label"><i class="icon-deco">⭐</i> 已討伐</span><span class="stat-val" id="stat-total">0</span></div>
-            <div class="stat-box blue"><span class="stat-label"><i class="icon-deco">🔥</i> 連續天數</span><span class="stat-val" id="stat-streak">0</span></div>
+            <div class="stat-box pink"><span class="stat-label">⭐ 已討伐</span><span class="stat-val" id="stat-total">0</span></div>
+            <div class="stat-box blue"><span class="stat-label">🔥 連續天數</span><span class="stat-val" id="stat-streak">0</span></div>
         </div>
-        <div style="font-size:20px;"><i class="icon-deco">🐾</i> 總討伐進度: <span id="progress-percent">0</span>%</div>
+        <div style="font-size:20px;">🐾 總討伐進度: <span id="progress-percent">0</span>%</div>
         <div class="bar-outer"><div class="bar-inner" id="total-bar"></div></div>
         
-        <button class="btn-yaha" onclick="initMission('daily')"><i class="icon-deco">🏹</i> 今日任務 (40字)</button>
-        <button class="btn-yaha" style="background:var(--hachi-blue)" onclick="initMission('review')"><i class="icon-deco">🥕</i> 弱點複習</button>
-        <button class="btn-yaha" style="background:var(--chiikawa-pink)" onclick="initMission('challenge')"><i class="icon-deco">💨</i> 60秒限時挑戰</button>
+        <button class="btn-yaha" onclick="initMission('daily')">🏹 今日任務 (40字)</button>
+        <button class="btn-yaha" style="background:var(--hachi-blue)" onclick="initMission('review')">🥕 弱點複習</button>
+        <button class="btn-yaha" style="background:var(--chiikawa-pink)" onclick="initMission('challenge')">💨 60秒限時挑戰</button>
     </div>
 
     <div id="study-zone" class="hidden">
@@ -160,17 +160,12 @@ button { width: 100%; padding: 22px; font-size: 26px; border-radius: 30px; borde
         </div>
         <div id="choices-area"></div>
         <div id="spelling-area" class="hidden">
-    <input type="text" id="spelling-input" placeholder="拼拼看..." 
-           autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
-    
-    <div id="answer-hint" class="answer-hint-box hidden">
-        <div style="font-size:16px; color:#d32f2f;">加油！正確答案是：</div>
-        <div id="hint-text" style="font-size:36px; color:#b71c1c;">WORD</div>
-    </div>
-    
-    <button id="confirm-btn" class="btn-yaha" onclick="checkSpelling()">寫好了！ (Yaha!)</button>
-    <button id="memorized-btn" class="btn-yaha hidden" style="background:var(--accent-orange)" onclick="proceedAfterHint()">我背好了！ (Puru!)</button>
-</div>
+            <input type="text" id="spelling-input" placeholder="拼拼看..." 
+                   autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+            <div id="answer-hint" class="answer-hint-box hidden">
+                <div style="font-size:16px; color:#d32f2f;">加油！正確答案是：</div>
+                <div id="hint-text" style="font-size:36px; color:#b71c1c;">WORD</div>
+            </div>
             <button id="confirm-btn" class="btn-yaha" onclick="checkSpelling()">寫好了！ (Yaha!)</button>
             <button id="memorized-btn" class="btn-yaha hidden" style="background:var(--accent-orange)" onclick="proceedAfterHint()">我背好了！ (Puru!)</button>
         </div>
@@ -185,11 +180,11 @@ button { width: 100%; padding: 22px; font-size: 26px; border-radius: 30px; borde
             <button class="btn-yaha" onclick="retryGroupWrongs()">🔥 再次挑戰錯題</button>
         </div>
         <button class="btn-yaha" id="next-action-btn">下一組加油！</button>
+        <button onclick="goBackHome()" style="background:none; border:none; text-decoration:underline; font-size:20px; margin-top:25px; cursor:pointer; color:#8d6e63;">回首頁</button>
     </div>
 </div>
 
 <script>
-// 單字資料庫與邏輯 (延續前版本)
 const rawData = `
 a,[冠詞] 一個;一種, I have a dream. (我有一個夢想。)
 a few,[片語] 一些, I have a few cookies in my bag. (我袋子裡有一些餅乾。)
@@ -2419,7 +2414,7 @@ function showFinish() {
         document.getElementById('next-action-btn').classList.add('hidden');
         let listHtml = "";
         session.groupWrongWords.forEach(w => {
-            listHtml += `<div class="review-item"><div><b>${w.word}</b><br><small>${w.meaning}</small></div><div class="speaker-btn mini-speaker" onclick="speak('${w.word}')"></div></div>`;
+            listHtml += `<div class="review-item"><div><b>${w.word}</b><br><small>${w.meaning}</small></div><div class="speaker-btn mini-speaker" style="width:40px;height:40px;font-size:20px" onclick="speak('${w.word}')"></div></div>`;
         });
         document.getElementById('wrong-list').innerHTML = listHtml;
     } else {
