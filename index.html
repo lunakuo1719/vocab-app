@@ -2,10 +2,11 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
 <title>單字討伐團！烏拉~</title>
 
-<link rel="apple-touch-icon" href="https://lunakuo1719.github.io/vocab-app/word.jpeg"> <meta name="apple-mobile-web-app-title" content="單字討伐團">
+<link rel="apple-touch-icon" href="https://lunakuo1719.github.io/vocab-app/word.jpeg"> 
+<meta name="apple-mobile-web-app-title" content="單字討伐團">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
@@ -31,7 +32,9 @@
 }
 
 body {
-    margin: 0; padding: 10px; background-color: var(--usagi-yellow);
+    margin: 0; 
+    padding: 10px 10px calc(20px + env(safe-area-inset-bottom)) 10px; /* 修正1: 預留 iPhone 安全區域 */
+    background-color: var(--usagi-yellow);
     display: flex; justify-content: center; align-items: center; min-height: 100vh;
     color: var(--usagi-dark);
     overscroll-behavior-y: contain;
@@ -40,10 +43,14 @@ body {
 .card {
     width: 100%; max-width: 500px; background: white;
     border: 5px solid var(--usagi-dark);
-    border-radius: 45px; padding: 30px;
+    border-radius: 45px; padding: 25px;
     box-shadow: 0px 12px 0px var(--accent-orange);
     position: relative; text-align: center;
+    max-height: 92vh; overflow-y: auto; /* 修正1: 防止內容過長被遮蔽 */
 }
+
+/* 為了讓 iPhone 捲動順暢 */
+.card::-webkit-scrollbar { width: 0; background: transparent; }
 
 .home-btn {
     position: absolute; top: 20px; right: 20px;
@@ -55,7 +62,7 @@ body {
 }
 
 .usagi-icon {
-    width: 160px; height: auto; cursor: pointer;
+    width: 140px; height: auto; cursor: pointer;
     animation: bounce 0.6s infinite alternate;
 }
 @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-15px); } }
@@ -81,21 +88,21 @@ body {
 }
 .speaker-btn::after { content: "♫"; font-size: 28px; color: var(--usagi-dark); font-weight: 900; }
 
-.word-text { font-size: 54px; margin: 10px 0; color: #4e342e; text-shadow: 1px 1px 0px #fff; }
+.word-text { font-size: 48px; margin: 10px 0; color: #4e342e; text-shadow: 1px 1px 0px #fff; }
 .meaning-text { font-size: 28px; color: #8d6e63; background: #fff8e1; padding: 10px 22px; border-radius: 22px; display: inline-block; margin-bottom: 15px; border: 3px solid #ffe082; }
 .sentence-box { background: #fafafa; border: 4px dashed var(--accent-orange); padding: 22px; border-radius: 32px; margin-top: 15px; text-align: left; font-size: 21px; line-height: 1.6; color: #5d4037; }
 
 #spelling-input {
-    width: 100%; padding: 22px; font-size: 38px;
+    width: 100%; padding: 18px; font-size: 32px;
     border: 5px solid var(--usagi-dark); border-radius: 25px;
     text-align: center; outline: none; margin: 15px 0;
     background: #fff; -webkit-appearance: none;
 }
 
-button { width: 100%; padding: 22px; font-size: 26px; border-radius: 30px; border: 4px solid var(--usagi-dark); cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+button { width: 100%; padding: 18px; font-size: 24px; border-radius: 30px; border: 4px solid var(--usagi-dark); cursor: pointer; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; }
 .btn-yaha { background: var(--yaha-gold); box-shadow: 0 8px 0 var(--usagi-dark); }
 .btn-yaha:active { transform: translateY(5px); box-shadow: 0 2px 0 var(--usagi-dark); }
-.btn-choice { background: white; margin-bottom: 15px; font-size: 24px; box-shadow: 0 6px 0 #eee; }
+.btn-choice { background: white; margin-bottom: 12px; font-size: 22px; box-shadow: 0 6px 0 #eee; }
 
 .answer-hint-box { background: #ffcdd2; padding: 15px; border-radius: 20px; border: 3px solid var(--usagi-dark); margin: 10px 0; }
 .review-item { display: flex; align-items: center; justify-content: space-between; background: #fff8e1; border: 3px solid var(--usagi-dark); padding: 12px 20px; border-radius: 20px; margin-bottom: 10px; text-align: left; }
@@ -120,17 +127,17 @@ button { width: 100%; padding: 22px; font-size: 26px; border-radius: 30px; borde
     </div>
 
     <div id="dashboard">
-        <h2 style="font-size:32px; margin-bottom:25px;">單字討伐團！烏拉~</h2>
+        <h2 style="font-size:32px; margin-bottom:20px;">單字討伐團！烏拉~</h2>
         <div class="stats-grid">
-            <div class="stat-box pink"><span class="stat-label"><i class="icon-deco">⭐</i> 已討伐</span><span class="stat-val" id="stat-total">0</span></div>
+            <div class="stat-box pink"><span class="stat-label"><i class="icon-deco">⭐</i> 已熟練</span><span class="stat-val" id="stat-total">0</span></div>
             <div class="stat-box blue"><span class="stat-label"><i class="icon-deco">🔥</i> 連續天數</span><span class="stat-val" id="stat-streak">0</span></div>
         </div>
-        <div style="font-size:20px;"><i class="icon-deco">🐾</i> 總討伐進度: <span id="progress-percent">0</span>%</div>
+        <div style="font-size:18px;"><i class="icon-deco">🐾</i> 熟練進度: <span id="progress-percent">0</span>% (滿10次答對)</div>
         <div class="bar-outer"><div class="bar-inner" id="total-bar"></div></div>
         
         <button class="btn-yaha" onclick="initMission('daily')"><i class="icon-deco">🏹</i> 今日任務 (40字)</button>
         <button class="btn-yaha" style="background:var(--hachi-blue)" onclick="initMission('review')"><i class="icon-deco">🥕</i> 弱點複習</button>
-        <button class="btn-yaha" style="background:var(--chiikawa-pink)" onclick="initMission('challenge')"><i class="icon-deco">💨</i> 60秒限時挑戰</button>
+        <button class="btn-yaha" style="background:var(--chiikawa-pink)" onclick="initMission('challenge')"><i class="icon-deco">⏱️</i> 計時複習挑戰</button>
     </div>
 
     <div id="study-zone" class="hidden">
@@ -148,8 +155,8 @@ button { width: 100%; padding: 22px; font-size: 26px; border-radius: 30px; borde
 
     <div id="game-zone" class="hidden">
         <div id="mode-badge" class="badge">討伐中！</div>
-        <div id="timer-display" class="hidden" style="color:#d32f2f; font-size:26px; margin-bottom:10px;">💨 時間: 60s</div>
-        <div id="quiz-progress" style="margin-bottom:5px;">討伐進度: 1 / 5</div>
+        <div id="timer-display" class="hidden" style="color:#d32f2f; font-size:26px; margin-bottom:10px;">⏱️ 用時: 0s</div>
+        <div id="quiz-progress" style="margin-bottom:5px;">進度: 1 / 5</div>
         <div class="bar-outer" style="height:18px;"><div class="bar-inner" id="exam-bar"></div></div>
         
         <div class="word-box">
@@ -175,7 +182,7 @@ button { width: 100%; padding: 22px; font-size: 26px; border-radius: 30px; borde
 
     <div id="finish-zone" class="hidden">
         <h2 style="font-size:40px;">🎉 討伐結果</h2>
-        <div id="finish-stats" style="font-size:30px; line-height:2; margin:20px 0;"></div>
+        <div id="finish-stats" style="font-size:26px; line-height:1.8; margin:20px 0;"></div>
         <div id="wrong-review-area" class="hidden">
             <div style="color:#d32f2f; margin-bottom:15px; font-size:20px;">需要再加強的單字：</div>
             <div id="wrong-list" style="margin-bottom: 20px;"></div>
@@ -2265,9 +2272,21 @@ zero,[名詞] 零, The temperature is zero degrees. (溫度是零度。)
 zoo,[名詞] 動物園, We saw many animals at the zoo. (我們在動物園看到了許多動物。)
 `;
 
+// 修正2: 引入熟練度分數系統 (Mastery Score)
 let db = [];
-let userStats = JSON.parse(localStorage.getItem('usagi_v11_data')) || { mastered: [], wrongCounts: {}, streak: 0, lastDate: null };
-let session = { mode: '', fullPool: [], groupIdx: 0, currentGroup: [], index: 0, correct: 0, wrong: 0, timer: null, timeLeft: 60, wrongAttempts: 0, groupWrongWords: [] };
+let userStats = JSON.parse(localStorage.getItem('usagi_v12_data')) || { 
+    mastered: [], // 存放已滿10分的單字
+    masteryScores: {}, // 紀錄每個字的得分 { "apple": 5 }
+    streak: 0, 
+    lastDate: null 
+};
+
+let session = { 
+    mode: '', fullPool: [], groupIdx: 0, currentGroup: [], 
+    index: 0, correct: 0, wrong: 0, 
+    timer: null, timeElapsed: 0, 
+    wrongAttempts: 0, groupWrongWords: [] 
+};
 
 function init() {
     db = rawData.trim().split("\n").map(line => {
@@ -2287,9 +2306,15 @@ function goBackHome() {
 }
 
 function updateDashboard() {
-    document.getElementById('stat-total').innerText = userStats.mastered.length;
+    // 修正熟練度定義：滿10次為熟練
+    let masteredCount = db.filter(w => (userStats.masteryScores[w.word] || 0) >= 10).length;
+    document.getElementById('stat-total').innerText = masteredCount;
     document.getElementById('stat-streak').innerText = userStats.streak || 0;
-    let p = Math.round((userStats.mastered.length / db.length) * 100) || 0;
+    
+    let totalScore = 0;
+    db.forEach(w => totalScore += Math.min(10, (userStats.masteryScores[w.word] || 0)));
+    let p = Math.round((totalScore / (db.length * 10)) * 100) || 0;
+    
     document.getElementById('total-bar').style.width = p + "%";
     document.getElementById('progress-percent').innerText = p;
 }
@@ -2297,10 +2322,30 @@ function updateDashboard() {
 function initMission(mode) {
     session.mode = mode; session.groupIdx = 0;
     document.getElementById('back-home-btn').classList.remove('hidden');
-    if(mode === 'daily') session.fullPool = shuffle(db).slice(0, 40);
-    else if(mode === 'review') session.fullPool = shuffle(db.filter(w => (userStats.wrongCounts[w.word] || 0) > 0)).slice(0, 20);
-    else { session.fullPool = shuffle(db); startChallenge(); return; }
-    if(session.fullPool.length === 0) { alert("目前沒有錯題喔！"); goBackHome(); return; }
+    
+    if(mode === 'daily') {
+        // 優先挑選分數低於10的字
+        let available = db.filter(w => (userStats.masteryScores[w.word] || 0) < 10);
+        session.fullPool = shuffle(available).slice(0, 40);
+    } else if(mode === 'review') {
+        // 挑選分數介於 1~9 的字
+        let needReview = db.filter(w => {
+            let s = userStats.masteryScores[w.word] || 0;
+            return s > 0 && s < 10;
+        });
+        session.fullPool = shuffle(needReview).slice(0, 20);
+    } else { 
+        // 修正2: 計時挑戰 - 挑戰所有尚未熟練的字
+        let challengePool = db.filter(w => (userStats.masteryScores[w.word] || 0) < 10);
+        session.fullPool = shuffle(challengePool); 
+        startChallenge(); 
+        return; 
+    }
+    
+    if(session.fullPool.length === 0) { 
+        alert("太厲害了！所有單字都已經達到熟練水準（10次正確）！"); 
+        goBackHome(); return; 
+    }
     startNextGroup();
 }
 
@@ -2316,7 +2361,8 @@ function showStudy() {
     document.querySelectorAll('.card > div:not(.header-deco):not(#back-home-btn)').forEach(d => d.classList.add('hidden'));
     document.getElementById('study-zone').classList.remove('hidden');
     let q = session.currentGroup[session.index];
-    document.getElementById('study-progress').innerText = `第 ${session.index + 1} / ${session.currentGroup.length} 個`;
+    let score = userStats.masteryScores[q.word] || 0;
+    document.getElementById('study-progress').innerText = `熟練度: ${score}/10`;
     document.getElementById('study-word').innerText = q.word;
     document.getElementById('study-mean').innerText = q.meaning;
     document.getElementById('study-sentence').innerText = q.sentence;
@@ -2340,9 +2386,7 @@ function startQuiz() {
 function nextQuizQuestion() {
     resetUsagi();
     session.wrongAttempts = 0;
-    
-    // 清除上一次遺留的狀態
-    document.getElementById('choices-area').innerHTML = ""; // 關鍵修正：清除上題選擇題
+    document.getElementById('choices-area').innerHTML = ""; 
     document.getElementById('answer-hint').classList.add('hidden');
     document.getElementById('confirm-btn').classList.remove('hidden');
     document.getElementById('memorized-btn').classList.add('hidden');
@@ -2356,11 +2400,9 @@ function nextQuizQuestion() {
     document.getElementById('exam-bar').style.width = (session.index / session.currentGroup.length) * 100 + "%";
     
     if(!isSpelling) {
-        // --- 選擇題模式 ---
         document.getElementById('q-text').innerText = q.word;
         document.getElementById('q-sub').innerText = "選出正確意思！";
         document.getElementById('spelling-area').classList.add('hidden');
-        
         let opts = shuffle(db.filter(x => x.word !== q.word)).slice(0, 3).concat(q);
         shuffle(opts).forEach(opt => {
             let b = document.createElement('button'); 
@@ -2370,7 +2412,6 @@ function nextQuizQuestion() {
             document.getElementById('choices-area').appendChild(b);
         });
     } else {
-        // --- 拼寫題模式 ---
         document.getElementById('q-text').innerText = "???";
         document.getElementById('q-sub').innerText = q.meaning;
         document.getElementById('spelling-area').classList.remove('hidden');
@@ -2403,12 +2444,14 @@ function handleAnswer(isCorrect) {
     let q = session.currentGroup[session.index];
     if(isCorrect) {
         session.correct++;
-        if(!userStats.mastered.includes(q.word)) userStats.mastered.push(q.word);
+        // 修正2: 費曼學習加分邏輯 - 答對+1分，上限10分
+        userStats.masteryScores[q.word] = (userStats.masteryScores[q.word] || 0) + 1;
         document.getElementById('usagi').className = "usagi-icon usagi-shake";
         document.getElementById('sound-correct').play();
     } else {
         session.wrong++;
-        userStats.wrongCounts[q.word] = (userStats.wrongCounts[q.word] || 0) + 1;
+        // 修正2: 答錯分數歸零，強制重複出現
+        userStats.masteryScores[q.word] = 0;
         if(!session.groupWrongWords.includes(q)) session.groupWrongWords.push(q);
         document.getElementById('sound-wrong').play();
         document.getElementById('usagi').src = "https://lunakuo1719.github.io/vocab-app/usagi-ha.gif";
@@ -2418,9 +2461,14 @@ function handleAnswer(isCorrect) {
 }
 
 function showFinish() {
+    if(session.timer) clearInterval(session.timer);
     document.querySelectorAll('.card > div:not(.header-deco):not(#back-home-btn)').forEach(d => d.classList.add('hidden'));
     document.getElementById('finish-zone').classList.remove('hidden');
-    document.getElementById('finish-stats').innerHTML = `<span style="color:#2e7d32">成功：${session.correct}</span><br><span style="color:#d32f2f">失手：${session.wrong}</span>`;
+    
+    let timeText = session.mode === 'challenge' ? `<br>⏱️ 總耗時: ${session.timeElapsed} 秒` : "";
+    document.getElementById('finish-stats').innerHTML = 
+        `<span style="color:#2e7d32">成功：${session.correct}</span><br>` +
+        `<span style="color:#d32f2f">失手：${session.wrong}</span>` + timeText;
     
     if(session.groupWrongWords.length > 0) {
         document.getElementById('wrong-review-area').classList.remove('hidden');
@@ -2447,10 +2495,10 @@ function proceedToNextAction() {
     session.groupIdx += 5;
     let btn = document.getElementById('next-action-btn');
     if(session.groupIdx >= session.fullPool.length) {
-        btn.innerText = "全部完成！回首頁"; btn.onclick = () => goBackHome();
+        btn.innerText = "本組完成！回首頁"; btn.onclick = () => goBackHome();
         updateStreak();
     } else {
-        btn.innerText = "繼續下一組預習！"; btn.onclick = startNextGroup;
+        btn.innerText = "繼續下一組！"; btn.onclick = startNextGroup;
     }
 }
 
@@ -2463,16 +2511,19 @@ function updateStreak() {
     }
 }
 
+// 修正2: 計時複習挑戰邏輯
 function startChallenge() {
-    session.currentGroup = shuffle(db); session.index = 0; session.correct = 0; session.wrong = 0; session.timeLeft = 60;
+    session.currentGroup = shuffle(session.fullPool); 
+    session.index = 0; session.correct = 0; session.wrong = 0; session.timeElapsed = 0;
     document.getElementById('back-home-btn').classList.remove('hidden');
     document.querySelectorAll('.card > div:not(.header-deco):not(#back-home-btn)').forEach(d => d.classList.add('hidden'));
     document.getElementById('game-zone').classList.remove('hidden');
     document.getElementById('timer-display').classList.remove('hidden');
+    document.getElementById('timer-display').innerText = `⏱️ 用時: 0s`;
+    
     session.timer = setInterval(() => {
-        session.timeLeft--;
-        document.getElementById('timer-display').innerText = `💨 時間: ${session.timeLeft}s`;
-        if(session.timeLeft <= 0) { clearInterval(session.timer); showFinish(); }
+        session.timeElapsed++;
+        document.getElementById('timer-display').innerText = `⏱️ 用時: ${session.timeElapsed}s`;
     }, 1000);
     nextQuizQuestion();
 }
@@ -2480,7 +2531,7 @@ function startChallenge() {
 function resetUsagi() { document.getElementById('usagi').className = "usagi-icon"; document.getElementById('usagi').src = "https://lunakuo1719.github.io/vocab-app/usagi.gif"; }
 function speak(t) { window.speechSynthesis.cancel(); let u = new SpeechSynthesisUtterance(t); u.lang = "en-US"; u.rate = 0.85; window.speechSynthesis.speak(u); }
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-function saveData() { localStorage.setItem('usagi_v11_data', JSON.stringify(userStats)); }
+function saveData() { localStorage.setItem('usagi_v12_data', JSON.stringify(userStats)); }
 function usagiSpeak() { document.getElementById('sound-usagi').play(); }
 init();
 </script>
