@@ -102,6 +102,9 @@ button { width: 100%; padding: 18px; font-size: 24px; border-radius: 30px; borde
 .btn-yaha:active { transform: translateY(5px); box-shadow: 0 2px 0 var(--usagi-dark); }
 .btn-choice { background: white; margin-bottom: 12px; font-size: 22px; box-shadow: 0 6px 0 #eee; }
 
+/* 新增：刷新按鈕樣式 */
+.refresh-btn { background: none; border: none; font-size: 16px; color: #8d6e63; text-decoration: underline; margin-top: 20px; cursor: pointer; box-shadow: none; padding: 10px; width: auto; display: inline-block; }
+
 .answer-hint-box { background: #ffcdd2; padding: 15px; border-radius: 20px; border: 3px solid var(--usagi-dark); margin: 10px 0; }
 .review-item { display: flex; align-items: center; justify-content: space-between; background: #fff8e1; border: 3px solid var(--usagi-dark); padding: 12px 20px; border-radius: 20px; margin-bottom: 10px; text-align: left; }
 .mini-speaker { width: 40px; height: 40px; font-size: 20px; }
@@ -136,6 +139,8 @@ button { width: 100%; padding: 18px; font-size: 24px; border-radius: 30px; borde
         <button class="btn-yaha" onclick="initMission('daily')"><i class="icon-deco">🏹</i> 今日任務 (40字)</button>
         <button class="btn-yaha" style="background:var(--hachi-blue)" onclick="initMission('review')"><i class="icon-deco">🥕</i> 弱點複習</button>
         <button class="btn-yaha" style="background:var(--chiikawa-pink)" onclick="initMission('challenge')"><i class="icon-deco">⏱️</i> 計時複習挑戰</button>
+        
+        <button class="refresh-btn" onclick="refreshApp()">🔄 刷新版本 (保留進度)</button>
     </div>
 
     <div id="study-zone" class="hidden">
@@ -191,7 +196,6 @@ button { width: 100%; padding: 18px; font-size: 24px; border-radius: 30px; borde
 </div>
 
 <script>
-// 這裡放您的 2000 個單字
 const rawData = `
 a,[冠詞] 一個;一種, I have a dream. (我有一個夢想。)
 a few,[片語] 一些, I have a few cookies in my bag. (我袋子裡有一些餅乾。)
@@ -2272,10 +2276,10 @@ zoo,[名詞] 動物園, We saw many animals at the zoo. (我們在動物園看�
 `;
 
 let db = [];
-// 升級到 v13 資料版本
-let userStats = JSON.parse(localStorage.getItem('usagi_v13_data')) || { 
+// 為了避免舊資料干擾，這裡升級版本號到 v14
+let userStats = JSON.parse(localStorage.getItem('usagi_v14_data')) || { 
     mastered: [], 
-    encountered: [], // 紀錄接觸過的單字
+    encountered: [], 
     masteryScores: {}, 
     streak: 0, 
     lastDate: null 
@@ -2305,6 +2309,11 @@ function goBackHome() {
     updateDashboard();
 }
 
+// 需求3：新增刷新版本功能，利用強制 reload 重新載入頁面，並避開 cache
+function refreshApp() {
+    window.location.reload(true);
+}
+
 function updateDashboard() {
     let masteredCount = db.filter(w => (userStats.masteryScores[w.word] || 0) >= 10).length;
     document.getElementById('stat-total').innerText = masteredCount;
@@ -2326,7 +2335,6 @@ function initMission(mode) {
         let available = db.filter(w => (userStats.masteryScores[w.word] || 0) < 10);
         session.fullPool = shuffle(available).slice(0, 40);
         
-        // 將選中的 40 個字加入 encountered 清單
         session.fullPool.forEach(w => {
             if(!userStats.encountered.includes(w.word)) userStats.encountered.push(w.word);
         });
@@ -2338,7 +2346,7 @@ function initMission(mode) {
         });
         session.fullPool = shuffle(needReview).slice(0, 20);
     } else { 
-        // 計時複習挑戰：只選取 Encountered 且分數 < 10 的字
+        // 需求2：計時挑戰只從已遭遇(encountered)且未熟練的單字中抽選
         let challengePool = db.filter(w => 
             userStats.encountered.includes(w.word) && 
             (userStats.masteryScores[w.word] || 0) < 10
@@ -2348,6 +2356,7 @@ function initMission(mode) {
             alert("目前計時挑戰清單是空的！請先去執行『今日任務』來開啟新的單字喔！");
             goBackHome(); return;
         }
+        
         session.fullPool = shuffle(challengePool); 
         startChallenge(); return; 
     }
@@ -2405,7 +2414,9 @@ function nextQuizQuestion() {
     if(session.index >= session.fullPool.length && session.mode === 'challenge') return showFinish();
 
     let q = session.mode === 'challenge' ? session.fullPool[session.index] : session.currentGroup[session.index];
-    let isSpelling = Math.random() > 0.5 && session.mode !== 'challenge';
+    
+    // 需求1：強制所有測驗題型皆為選擇題，取消拼字 (isSpelling 永遠為 false)
+    let isSpelling = false; 
     
     let totalCount = session.mode === 'challenge' ? session.fullPool.length : session.currentGroup.length;
     document.getElementById('quiz-progress').innerText = `進度: ${session.index + 1} / ${totalCount}`;
@@ -2423,17 +2434,12 @@ function nextQuizQuestion() {
             b.onclick = () => handleAnswer(opt.word === q.word);
             document.getElementById('choices-area').appendChild(b);
         });
-    } else {
-        document.getElementById('q-text').innerText = "???";
-        document.getElementById('q-sub').innerText = q.meaning;
-        document.getElementById('spelling-area').classList.remove('hidden');
-        document.getElementById('spelling-input').value = "";
-        setTimeout(() => document.getElementById('spelling-input').focus(), 300);
     }
     speak(q.word);
 }
 
 function checkSpelling() {
+    // 雖然不使用了，但保留以防未來需要
     let q = session.currentGroup[session.index];
     let isCorrect = document.getElementById('spelling-input').value.trim().toLowerCase() === q.word.toLowerCase();
     if(isCorrect) handleAnswer(true);
@@ -2463,7 +2469,7 @@ function handleAnswer(isCorrect) {
         document.getElementById('sound-correct').play();
     } else {
         session.wrong++;
-        userStats.masteryScores[q.word] = 0; // 答錯歸零
+        userStats.masteryScores[q.word] = 0; 
         if(!session.groupWrongWords.includes(q)) session.groupWrongWords.push(q);
         document.getElementById('sound-wrong').play();
         document.getElementById('usagi').src = "https://lunakuo1719.github.io/vocab-app/usagi-ha.gif";
@@ -2550,7 +2556,7 @@ function startChallenge() {
 function resetUsagi() { document.getElementById('usagi').className = "usagi-icon"; document.getElementById('usagi').src = "https://lunakuo1719.github.io/vocab-app/usagi.gif"; }
 function speak(t) { window.speechSynthesis.cancel(); let u = new SpeechSynthesisUtterance(t); u.lang = "en-US"; u.rate = 0.85; window.speechSynthesis.speak(u); }
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-function saveData() { localStorage.setItem('usagi_v13_data', JSON.stringify(userStats)); }
+function saveData() { localStorage.setItem('usagi_v14_data', JSON.stringify(userStats)); }
 function usagiSpeak() { document.getElementById('sound-usagi').play(); }
 init();
 </script>
