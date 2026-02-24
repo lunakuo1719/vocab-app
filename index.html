@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
 <title>單字討伐團！烏拉~</title>
 
-<link rel="apple-touch-icon" href="https://lunakuo1719.github.io/vocab-app/word.jpeg"> <meta name="apple-mobile-web-app-title" content="單字討伐團">
+<link rel="apple-touch-icon" href="https://lunakuo1719.github.io/vocab-app/word.jpeg"> 
+<meta name="apple-mobile-web-app-title" content="單字討伐團">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
@@ -102,7 +103,6 @@ button { width: 100%; padding: 18px; font-size: 24px; border-radius: 30px; borde
 .btn-yaha:active { transform: translateY(5px); box-shadow: 0 2px 0 var(--usagi-dark); }
 .btn-choice { background: white; margin-bottom: 12px; font-size: 22px; box-shadow: 0 6px 0 #eee; }
 
-/* 新增：刷新按鈕樣式 */
 .refresh-btn { background: none; border: none; font-size: 16px; color: #8d6e63; text-decoration: underline; margin-top: 20px; cursor: pointer; box-shadow: none; padding: 10px; width: auto; display: inline-block; }
 
 .answer-hint-box { background: #ffcdd2; padding: 15px; border-radius: 20px; border: 3px solid var(--usagi-dark); margin: 10px 0; }
@@ -133,7 +133,7 @@ button { width: 100%; padding: 18px; font-size: 24px; border-radius: 30px; borde
             <div class="stat-box pink"><span class="stat-label"><i class="icon-deco">⭐</i> 已熟練</span><span class="stat-val" id="stat-total">0</span></div>
             <div class="stat-box blue"><span class="stat-label"><i class="icon-deco">🔥</i> 連續天數</span><span class="stat-val" id="stat-streak">0</span></div>
         </div>
-        <div style="font-size:18px;"><i class="icon-deco">🐾</i> 熟練進度: <span id="progress-percent">0</span>% (滿10次答對)</div>
+        <div style="font-size:18px;"><i class="icon-deco">🐾</i> 熟練進度: <span id="progress-percent">0</span>% (滿5次答對)</div>
         <div class="bar-outer"><div class="bar-inner" id="total-bar"></div></div>
         
         <button class="btn-yaha" onclick="initMission('daily')"><i class="icon-deco">🏹</i> 今日任務 (40字)</button>
@@ -145,7 +145,7 @@ button { width: 100%; padding: 18px; font-size: 24px; border-radius: 30px; borde
 
     <div id="study-zone" class="hidden">
         <div class="badge">預習時間！ (Puru!)</div>
-        <div style="color:#8d6e63; font-size:24px; margin-bottom:10px;" id="study-progress">熟練度: 0/10</div>
+        <div style="color:#8d6e63; font-size:24px; margin-bottom:10px;" id="study-progress">熟練度: 0/5</div>
         <div class="word-text" id="study-word">Word</div>
         <div class="meaning-text" id="study-mean">意思</div>
         <div><div class="speaker-btn" id="study-word-speak"></div></div>
@@ -2276,8 +2276,8 @@ zoo,[名詞] 動物園, We saw many animals at the zoo. (我們在動物園看�
 `;
 
 let db = [];
-// 為了避免舊資料干擾，這裡升級版本號到 v14
-let userStats = JSON.parse(localStorage.getItem('usagi_v14_data')) || { 
+// 為了套用 5 次熟練的新系統，將資料庫名稱更新為 v15
+let userStats = JSON.parse(localStorage.getItem('usagi_v15_data')) || { 
     mastered: [], 
     encountered: [], 
     masteryScores: {}, 
@@ -2309,19 +2309,20 @@ function goBackHome() {
     updateDashboard();
 }
 
-// 需求3：新增刷新版本功能，利用強制 reload 重新載入頁面，並避開 cache
 function refreshApp() {
     window.location.reload(true);
 }
 
 function updateDashboard() {
-    let masteredCount = db.filter(w => (userStats.masteryScores[w.word] || 0) >= 10).length;
+    // 這裡改為滿 5 次算熟練
+    let masteredCount = db.filter(w => (userStats.masteryScores[w.word] || 0) >= 5).length;
     document.getElementById('stat-total').innerText = masteredCount;
     document.getElementById('stat-streak').innerText = userStats.streak || 0;
     
     let totalScore = 0;
-    db.forEach(w => totalScore += Math.min(10, (userStats.masteryScores[w.word] || 0)));
-    let p = Math.round((totalScore / (db.length * 10)) * 100) || 0;
+    // 總分計算上限也改為 5 分
+    db.forEach(w => totalScore += Math.min(5, (userStats.masteryScores[w.word] || 0)));
+    let p = Math.round((totalScore / (db.length * 5)) * 100) || 0;
     
     document.getElementById('total-bar').style.width = p + "%";
     document.getElementById('progress-percent').innerText = p;
@@ -2332,7 +2333,8 @@ function initMission(mode) {
     document.getElementById('back-home-btn').classList.remove('hidden');
     
     if(mode === 'daily') {
-        let available = db.filter(w => (userStats.masteryScores[w.word] || 0) < 10);
+        // 篩選未滿 5 分的單字
+        let available = db.filter(w => (userStats.masteryScores[w.word] || 0) < 5);
         session.fullPool = shuffle(available).slice(0, 40);
         
         session.fullPool.forEach(w => {
@@ -2346,10 +2348,10 @@ function initMission(mode) {
         });
         session.fullPool = shuffle(needReview).slice(0, 20);
     } else { 
-        // 需求2：計時挑戰只從已遭遇(encountered)且未熟練的單字中抽選
+        // 篩選遭遇過且未滿 5 分的單字
         let challengePool = db.filter(w => 
             userStats.encountered.includes(w.word) && 
-            (userStats.masteryScores[w.word] || 0) < 10
+            (userStats.masteryScores[w.word] || 0) < 5
         );
         
         if(challengePool.length === 0) {
@@ -2381,7 +2383,8 @@ function showStudy() {
     document.getElementById('study-zone').classList.remove('hidden');
     let q = session.currentGroup[session.index];
     let score = userStats.masteryScores[q.word] || 0;
-    document.getElementById('study-progress').innerText = `熟練度: ${score}/10`;
+    // 顯示改為 /5
+    document.getElementById('study-progress').innerText = `熟練度: ${score}/5`;
     document.getElementById('study-word').innerText = q.word;
     document.getElementById('study-mean').innerText = q.meaning;
     document.getElementById('study-sentence').innerText = q.sentence;
@@ -2415,7 +2418,6 @@ function nextQuizQuestion() {
 
     let q = session.mode === 'challenge' ? session.fullPool[session.index] : session.currentGroup[session.index];
     
-    // 需求1：強制所有測驗題型皆為選擇題，取消拼字 (isSpelling 永遠為 false)
     let isSpelling = false; 
     
     let totalCount = session.mode === 'challenge' ? session.fullPool.length : session.currentGroup.length;
@@ -2439,7 +2441,6 @@ function nextQuizQuestion() {
 }
 
 function checkSpelling() {
-    // 雖然不使用了，但保留以防未來需要
     let q = session.currentGroup[session.index];
     let isCorrect = document.getElementById('spelling-input').value.trim().toLowerCase() === q.word.toLowerCase();
     if(isCorrect) handleAnswer(true);
@@ -2464,7 +2465,8 @@ function handleAnswer(isCorrect) {
         session.correct++;
         let score = (userStats.masteryScores[q.word] || 0) + 1;
         userStats.masteryScores[q.word] = score;
-        if(score >= 10 && !userStats.mastered.includes(q.word)) userStats.mastered.push(q.word);
+        // 判定門檻降為 5 分
+        if(score >= 5 && !userStats.mastered.includes(q.word)) userStats.mastered.push(q.word);
         document.getElementById('usagi').className = "usagi-icon usagi-shake";
         document.getElementById('sound-correct').play();
     } else {
@@ -2556,7 +2558,7 @@ function startChallenge() {
 function resetUsagi() { document.getElementById('usagi').className = "usagi-icon"; document.getElementById('usagi').src = "https://lunakuo1719.github.io/vocab-app/usagi.gif"; }
 function speak(t) { window.speechSynthesis.cancel(); let u = new SpeechSynthesisUtterance(t); u.lang = "en-US"; u.rate = 0.85; window.speechSynthesis.speak(u); }
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-function saveData() { localStorage.setItem('usagi_v14_data', JSON.stringify(userStats)); }
+function saveData() { localStorage.setItem('usagi_v15_data', JSON.stringify(userStats)); }
 function usagiSpeak() { document.getElementById('sound-usagi').play(); }
 init();
 </script>
